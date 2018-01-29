@@ -5,7 +5,6 @@ import com.mmall.dto.DeptLevelDto;
 import com.mmall.param.DeptParam;
 import com.mmall.service.SysDeptService;
 import com.mmall.service.SysTreeService;
-import com.mmall.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,13 +33,8 @@ public class SysDeptController {
     @RequestMapping(value = "/save.json")
     @ResponseBody
     public JsonData saveDept(DeptParam deptParam) {
-        try {
-            sysDeptService.save(deptParam);
-            return JsonData.success("保存部门成功");
-        } catch (Exception e) {
-            log.error("save dept error, deptParam:{}", JsonMapper.obj2String(deptParam));
-            return JsonData.fail("保存部门出错");
-        }
+        sysDeptService.save(deptParam);
+        return JsonData.success("保存部门成功");
     }
 
     /**
@@ -64,12 +58,7 @@ public class SysDeptController {
     @RequestMapping(value = "/update.json")
     @ResponseBody
     public JsonData update(DeptParam deptParam) {
-        try {
-            sysDeptService.update(deptParam);
-            return JsonData.success("修改部门成功");
-        } catch (Exception e) {
-            log.error("update dept error, deptParam:{}", JsonMapper.obj2String(deptParam));
-            return JsonData.fail("修改部门出错");
-        }
+        sysDeptService.update(deptParam);
+        return JsonData.success("修改部门成功");
     }
 }

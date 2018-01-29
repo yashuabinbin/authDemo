@@ -8,14 +8,12 @@ package com.mmall.dto;
 
 import com.google.common.collect.Lists;
 import com.mmall.model.SysDept;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
-@Setter
-@Getter
+@Data
 public class DeptLevelDto extends SysDept implements Comparable<DeptLevelDto> {
 
     private List<DeptLevelDto> depList = Lists.newArrayList();

@@ -67,7 +67,12 @@ public class SysDeptService {
         }
 
         //获取更新前的部门对象
-        SysDept beforeDept = sysDeptMapper.selectByPrimaryKey(deptParam.getId());
+        SysDept beforeDept = null;
+        try {
+            beforeDept = sysDeptMapper.selectByPrimaryKey(deptParam.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SysDept afterDept = new SysDept();
         afterDept.setParentId(deptParam.getParentId());

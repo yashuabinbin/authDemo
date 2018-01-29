@@ -1,10 +1,9 @@
 package com.mmall.model;
 
-import lombok.*;
+import lombok.Data;
 
 import java.util.Date;
 
-@Builder
 @Data
 public class SysAcl {
 
