@@ -30,12 +30,11 @@ public class SysDeptService {
             throw new ParamException("同一层级下存在相同名称的部门");
         }
 
-        SysDept dept = SysDept.builder()
-                .parentId(deptParam.getParentId())
-                .name(deptParam.getName())
-                .remark(deptParam.getRemark())
-                .seq(deptParam.getSeq())
-                .build();
+        SysDept dept = new SysDept();
+        dept.setParentId(deptParam.getParentId());
+        dept.setName(deptParam.getName());
+        dept.setRemark(deptParam.getRemark());
+        dept.setSeq(deptParam.getSeq());
 
         dept.setLevel(LevelUtil.calculateLevel(dept.getParentId(), getLevel(deptParam.getParentId())));
         dept.setOperateIp("127.0.0.1");
