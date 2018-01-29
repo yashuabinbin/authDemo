@@ -32,6 +32,23 @@
         from sys_dept
     </select>
 
+    <select id="countByNameAndParentId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id)
+        from sys_dept
+        where parent_id = #{parentId}
+        and name = #{depName}
+        <if test="depId != null">
+            and id = #{depId}
+        </if>
+    </select>
+
+    <select id="getChildDeptListByLevel" parameterType="java.lang.String" resultType="com.mmall.model.SysDept">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dept
+        where level like concat (#{level}, '.%')
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_dept
         where id = #{id,jdbcType=INTEGER}
@@ -152,5 +169,13 @@
         operate_time = #{operateTime,jdbcType=TIMESTAMP},
         operate_ip = #{operateIp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="batchUpdateLevel">
+        <foreach collection="depList" item="item" separator=";">
+            update sys_dept
+            set level = #{item.level}
+            where id = #{item.id}
+        </foreach>
     </update>
 </mapper>

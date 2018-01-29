@@ -13,8 +13,12 @@ import com.mmall.param.DeptParam;
 import com.mmall.util.BeanValidator;
 import com.mmall.util.LevelUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -43,7 +47,7 @@ public class SysDeptService {
     }
 
     private boolean checkExist(Integer parentId, String depName, Integer id) {
-        return true;
+        return sysDeptMapper.countByNameAndParentId(parentId, depName, id) > 0;
     }
 
     private String getLevel(Integer depId) {
@@ -53,5 +57,49 @@ public class SysDeptService {
         } else {
             return dept.getLevel();
         }
+    }
+
+    public void update(DeptParam deptParam) {
+        BeanValidator.check(deptParam);
+
+        if (checkExist(deptParam.getParentId(), deptParam.getName(), deptParam.getId())) {
+            throw new ParamException("同一层级下存在相同名称的部门");
+        }
+
+        //获取更新前的部门对象
+        SysDept beforeDept = sysDeptMapper.selectByPrimaryKey(deptParam.getId());
+
+        SysDept afterDept = new SysDept();
+        afterDept.setParentId(deptParam.getParentId());
+        afterDept.setName(deptParam.getName());
+        afterDept.setRemark(deptParam.getRemark());
+        afterDept.setSeq(deptParam.getSeq());
+        afterDept.setOperator("system_update");
+        afterDept.setOperateIp("127.0.0.1");
+        afterDept.setOperateTime(new Date());
+        afterDept.setLevel(LevelUtil.calculateLevel(deptParam.getParentId(), getLevel(deptParam.getParentId())));
+        updateWithChild(beforeDept, afterDept);
+    }
+
+    private void updateWithChild(SysDept beforeDept, SysDept afterDept) {
+        String newLevelPrefix = afterDept.getLevel();
+        String oldLevelPrefix = beforeDept.getLevel();
+
+        if (!newLevelPrefix.equals(oldLevelPrefix)) {
+            List<SysDept> deptList = sysDeptMapper.getChildDeptListByLevel(oldLevelPrefix);
+            if (CollectionUtils.isNotEmpty(deptList)) {
+                for (SysDept dept : deptList) {
+                    String level = dept.getLevel();
+                    if (level.indexOf(oldLevelPrefix) != 0) {
+                        level = newLevelPrefix + level.substring(oldLevelPrefix.length());
+                        dept.setLevel(level);
+                    }
+                }
+
+                sysDeptMapper.batchUpdateLevel(deptList);
+            }
+        }
+
+        sysDeptMapper.updateByPrimaryKeySelective(afterDept);
     }
 }
