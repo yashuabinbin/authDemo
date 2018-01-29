@@ -1,12 +1,14 @@
 package com.mmall.model;
 
-import lombok.*;
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
-@Builder
-@Data
+@Setter
+@Getter
+@ToString
 public class SysDept {
 
     private Integer id;
