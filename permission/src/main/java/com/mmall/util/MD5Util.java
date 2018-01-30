@@ -26,7 +26,7 @@ public class MD5Util {
                 str[k++] = hexDigits[byte0 >>> 4 & 0xf];
                 str[k++] = hexDigits[byte0 & 0xf];
             }
-            return new String(str);
+            return new String(str).toLowerCase();
         } catch (Exception e) {
             log.error("generate md5 error, {}", s, e);
             return null;

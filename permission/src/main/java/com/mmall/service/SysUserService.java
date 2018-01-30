@@ -40,6 +40,7 @@ public class SysUserService {
         sysUser.setDeptId(userParam.getDepId());
         sysUser.setRemark(userParam.getRemark());
         sysUser.setStatus(userParam.getStatus());
+        sysUser.setUsername(userParam.getUsername());
         sysUser.setTelephone(userParam.getTelephone());
         sysUser.setPassword(MD5Util.encrypt(PasswordUtil.generatePassword()));
         sysUser.setOperateIp("127.0.0.1");
@@ -61,10 +62,13 @@ public class SysUserService {
         }
 
         SysUser beforeSysUser = sysUserMapper.selectByPrimaryKey(userParam.getId());
+        if (beforeSysUser == null)
+            throw new ParamException("待更新用户不存在");
 
         SysUser afterSysUser = new SysUser();
         afterSysUser.setId(userParam.getId());
         afterSysUser.setMail(userParam.getMail());
+        afterSysUser.setUsername(userParam.getUsername());
         afterSysUser.setDeptId(userParam.getDepId());
         afterSysUser.setRemark(userParam.getRemark());
         afterSysUser.setStatus(userParam.getStatus());
@@ -77,11 +81,11 @@ public class SysUserService {
     }
 
     private boolean checkEmailExist(String mail, Integer userId) {
-        return false;
+        return sysUserMapper.countByEmail(mail, userId) > 0;
     }
 
     private boolean checkTelephoneExist(String telephone, Integer userId) {
-        return false;
+        return sysUserMapper.countByTelephone(telephone, userId) > 0;
     }
 
     public SysUser findByKeyword(String username) {

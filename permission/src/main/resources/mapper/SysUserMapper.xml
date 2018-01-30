@@ -33,8 +33,27 @@
         select
         <include refid="Base_Column_List"/>
         from sys_user
-        where mail = #{keyword}
+        where username = #{keyword}
+        or mail = #{keyword}
         or telephone = #{keyword}
+    </select>
+
+    <select id="countByTelephone" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id)
+        from sys_user
+        where telephone = #{telephone}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
+    <select id="countByEmail" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id)
+        from sys_user
+        where mail = #{mail}
+        <if test="id != null">
+            and id != #{id}
+        </if>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

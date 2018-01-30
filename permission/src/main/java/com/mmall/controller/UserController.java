@@ -23,7 +23,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
-@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired
@@ -33,8 +32,8 @@ public class UserController {
     public void login(HttpSession session,
             HttpServletRequest request,
             HttpServletResponse response,
-            @RequestParam(value = "username") String username,
-            @RequestParam(value = "password") String password,
+            @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "ret", required = false) String ret) throws IOException, ServletException {
         String errorMsg = "";
 
@@ -51,13 +50,15 @@ public class UserController {
                 errorMsg = "用户已经被冻结，请联系管理员";
             } else {
                 session.setAttribute(Const.CURRENT_USER, sysUser);
-                response.sendRedirect(StringUtils.isBlank(ret) ? "/admin/index" : ret);
+                System.out.println(StringUtils.isBlank(ret));
+                response.sendRedirect(StringUtils.isBlank(ret) ? "/admin/index.page" : ret);
+                return;
             }
         }
 
         request.setAttribute("error", errorMsg);
         request.setAttribute("username", username);
-        if(StringUtils.isNoneBlank()) {
+        if(StringUtils.isNotBlank(ret)) {
             request.setAttribute("ret", ret);
         }
 
