@@ -32,7 +32,7 @@ public class SpringExceptionResolver implements HandlerExceptionResolver {
                 JsonData result = JsonData.fail(e.getMessage());
                 mv = new ModelAndView("jsonView", result.toMap());
             } else {
-                log.error("error Exception, url:" + url);
+                log.error("error Exception, url:{}, error:{}", url, e);
 
                 JsonData result = JsonData.fail(defaultMsg);
                 mv = new ModelAndView("jsonView", result.toMap());
@@ -41,7 +41,7 @@ public class SpringExceptionResolver implements HandlerExceptionResolver {
             JsonData result = JsonData.fail(defaultMsg);
             mv = new ModelAndView("exception", result.toMap());
         } else {
-            log.error("unknown Exception, url:" + url);
+            log.error("unknown Exception, url:{}, error:{}", url, e);
 
             JsonData result = JsonData.fail(defaultMsg);
             mv = new ModelAndView("jsonView", result.toMap());

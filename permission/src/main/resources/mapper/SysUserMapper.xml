@@ -29,10 +29,19 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="findByKeyword" parameterType="java.lang.String" resultType="com.mmall.model.SysUser">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where mail = #{keyword}
+        or telephone = #{keyword}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_user
         where id = #{id,jdbcType=INTEGER}
     </delete>
+
     <insert id="insert" parameterType="com.mmall.model.SysUser">
         insert into sys_user (id, username, telephone,
         mail, password, dept_id,
