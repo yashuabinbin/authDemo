@@ -28,6 +28,31 @@ public class UserController {
     @Autowired
     private SysUserService sysUserService;
 
+    /**
+     * 登出
+     *
+     * @param session
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "logout.page")
+    public void logout(HttpSession session, HttpServletResponse response) throws IOException {
+        session.invalidate();
+        response.sendRedirect("signin.jsp");
+    }
+
+    /**
+     * 登录
+     *
+     * @param session
+     * @param request
+     * @param response
+     * @param username
+     * @param password
+     * @param ret
+     * @throws IOException
+     * @throws ServletException
+     */
     @RequestMapping(value = "login.page")
     public void login(HttpSession session,
             HttpServletRequest request,
@@ -58,7 +83,7 @@ public class UserController {
 
         request.setAttribute("error", errorMsg);
         request.setAttribute("username", username);
-        if(StringUtils.isNotBlank(ret)) {
+        if (StringUtils.isNotBlank(ret)) {
             request.setAttribute("ret", ret);
         }
 

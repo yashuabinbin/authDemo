@@ -6,6 +6,7 @@
  */
 package com.mmall.controller;
 
+import com.mmall.beans.PageQuery;
 import com.mmall.common.JsonData;
 import com.mmall.param.UserParam;
 import com.mmall.service.SysUserService;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -24,12 +26,24 @@ public class SysUserController {
     private SysUserService sysUserService;
 
     /**
+     * 获取分页用户列表
+     * @param depId
+     * @param pageQuery
+     * @return
+     */
+    @RequestMapping(value = "/page.json")
+    @ResponseBody
+    public JsonData page(@RequestParam(value = "deptId") Integer depId, PageQuery pageQuery) {
+        return JsonData.success(sysUserService.getPageByDepId(depId, pageQuery));
+    }
+
+    /**
      * 保存用户
      *
      * @param userParam
      * @return
      */
-    @RequestMapping(value = "save.json")
+    @RequestMapping(value = "/save.json")
     @ResponseBody
     public JsonData saveUser(UserParam userParam) {
         sysUserService.save(userParam);
@@ -42,7 +56,7 @@ public class SysUserController {
      * @param userParam
      * @return
      */
-    @RequestMapping(value = "update.json")
+    @RequestMapping(value = "/update.json")
     @ResponseBody
     public JsonData updateUser(UserParam userParam) {
         sysUserService.update(userParam);

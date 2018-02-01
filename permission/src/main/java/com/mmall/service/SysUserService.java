@@ -6,6 +6,8 @@
  */
 package com.mmall.service;
 
+import com.mmall.beans.PageQuery;
+import com.mmall.beans.PageResult;
 import com.mmall.dao.SysUserMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysUser;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class SysUserService {
@@ -90,5 +93,19 @@ public class SysUserService {
 
     public SysUser findByKeyword(String username) {
         return sysUserMapper.findByKeyword(username);
+    }
+
+    public PageResult<SysUser> getPageByDepId(Integer depId, PageQuery pageQuery) {
+        BeanValidator.check(pageQuery);
+        int count = sysUserMapper.countByDepId(depId);
+        if(count > 0) {
+            List<SysUser> userList = sysUserMapper.selectPageByDepId(depId, pageQuery);
+            PageResult<SysUser> pageResult = new PageResult();
+            pageResult.setTotal(count);
+            pageResult.setData(userList);
+            return pageResult;
+        }
+
+        return new PageResult<SysUser>();
     }
 }

@@ -56,6 +56,20 @@
         </if>
     </select>
 
+    <select id="countByDepId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(id)
+        from sys_user
+        where dept_id = #{depId}
+    </select>
+
+    <select id="selectPageByDepId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where dept_id = #{depId}
+        limit #{pageQuery.offSet}, #{pageQuery.pageSize}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_user
         where id = #{id,jdbcType=INTEGER}
