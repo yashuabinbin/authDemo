@@ -8,6 +8,7 @@ package com.mmall.service;
 
 import com.mmall.beans.PageQuery;
 import com.mmall.beans.PageResult;
+import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysUserMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysUser;
@@ -40,14 +41,14 @@ public class SysUserService {
 
         SysUser sysUser = new SysUser();
         sysUser.setMail(userParam.getMail());
-        sysUser.setDeptId(userParam.getDepId());
+        sysUser.setDeptId(userParam.getDeptId());
         sysUser.setRemark(userParam.getRemark());
         sysUser.setStatus(userParam.getStatus());
         sysUser.setUsername(userParam.getUsername());
         sysUser.setTelephone(userParam.getTelephone());
         sysUser.setPassword(MD5Util.encrypt(PasswordUtil.generatePassword()));
-        sysUser.setOperateIp("127.0.0.1");
-        sysUser.setOperator("admin");
+        sysUser.setOperateIp(RequestHolder.getRequestIp());
+        sysUser.setOperator(RequestHolder.getCurrentUserName());
         sysUser.setOperateTime(new Date());
 
         sysUserMapper.insertSelective(sysUser);
@@ -72,12 +73,12 @@ public class SysUserService {
         afterSysUser.setId(userParam.getId());
         afterSysUser.setMail(userParam.getMail());
         afterSysUser.setUsername(userParam.getUsername());
-        afterSysUser.setDeptId(userParam.getDepId());
+        afterSysUser.setDeptId(userParam.getDeptId());
         afterSysUser.setRemark(userParam.getRemark());
         afterSysUser.setStatus(userParam.getStatus());
         afterSysUser.setTelephone(userParam.getTelephone());
-        afterSysUser.setOperateIp("127.0.0.1");
-        afterSysUser.setOperator("update_admin");
+        afterSysUser.setOperateIp(RequestHolder.getRequestIp());
+        afterSysUser.setOperator(RequestHolder.getCurrentUserName());
         afterSysUser.setOperateTime(new Date());
 
         sysUserMapper.updateByPrimaryKeySelective(afterSysUser);

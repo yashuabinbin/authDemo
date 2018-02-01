@@ -34,7 +34,7 @@ public class UserParam {
     private String mail;
 
     @NotNull(message = "必须提供用户所在的部门")
-    private Integer depId;
+    private Integer deptId;
 
     @NotNull(message = "必须指定用户状态")
     @Min(value = 0, message = "用户状态不合法")

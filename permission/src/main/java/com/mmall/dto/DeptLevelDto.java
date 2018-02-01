@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class DeptLevelDto extends SysDept implements Comparable<DeptLevelDto> {
 
-    private List<DeptLevelDto> depList = Lists.newArrayList();
+    private List<DeptLevelDto> deptList = Lists.newArrayList();
 
     public static DeptLevelDto adapt(SysDept sysDept) {
         DeptLevelDto deptLevelDto = new DeptLevelDto();

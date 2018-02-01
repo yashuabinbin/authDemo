@@ -6,6 +6,7 @@
  */
 package com.mmall.service;
 
+import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysDeptMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysDept;
@@ -41,8 +42,8 @@ public class SysDeptService {
         dept.setSeq(deptParam.getSeq());
 
         dept.setLevel(LevelUtil.calculateLevel(dept.getParentId(), getLevel(deptParam.getParentId())));
-        dept.setOperateIp("127.0.0.1");
-        dept.setOperator("admin");
+        dept.setOperateIp(RequestHolder.getRequestIp());
+        dept.setOperator(RequestHolder.getCurrentUserName());
         sysDeptMapper.insertSelective(dept);
     }
 
@@ -67,20 +68,16 @@ public class SysDeptService {
         }
 
         //获取更新前的部门对象
-        SysDept beforeDept = null;
-        try {
-            beforeDept = sysDeptMapper.selectByPrimaryKey(deptParam.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        SysDept beforeDept = sysDeptMapper.selectByPrimaryKey(deptParam.getId());
 
         SysDept afterDept = new SysDept();
+        afterDept.setId(deptParam.getId());
         afterDept.setParentId(deptParam.getParentId());
         afterDept.setName(deptParam.getName());
         afterDept.setRemark(deptParam.getRemark());
         afterDept.setSeq(deptParam.getSeq());
-        afterDept.setOperator("system_update");
-        afterDept.setOperateIp("127.0.0.1");
+        afterDept.setOperateIp(RequestHolder.getRequestIp());
+        afterDept.setOperator(RequestHolder.getCurrentUserName());
         afterDept.setOperateTime(new Date());
         afterDept.setLevel(LevelUtil.calculateLevel(deptParam.getParentId(), getLevel(deptParam.getParentId())));
         updateWithChild(beforeDept, afterDept);

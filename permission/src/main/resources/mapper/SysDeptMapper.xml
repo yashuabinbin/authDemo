@@ -175,7 +175,7 @@
     </update>
 
     <update id="batchUpdateLevel">
-        <foreach collection="depList" item="item" separator=";">
+        <foreach collection="deptList" item="item" separator=";">
             update sys_dept
             set level = #{item.level}
             where id = #{item.id}
