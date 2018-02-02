@@ -10,6 +10,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SysAclModule {
+
     private Integer id;
 
     private String name;
@@ -29,5 +30,6 @@ public class SysAclModule {
     private Date operateTime;
 
     private String operateIp;
+
 
 }

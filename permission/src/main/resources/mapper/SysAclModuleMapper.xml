@@ -27,9 +27,38 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="countByNameAndParentId" parameterType="java.util.Map" resultType="java.lang.Boolean">
+        select count(id)
+        from sys_acl_module
+        where `name` = #{name}
+        and parent_id = #{parentId}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
+    <select id="getChildModuleListByLevel" parameterType="java.util.Map" resultType="com.mmall.model.SysAclModule">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl_module
+        where level like concat(#{level}, '.%')
+    </select>
+
+    <select id="selectAllAclModule" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl_module
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_acl_module
         where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteSelfAndChildrenByLevel" parameterType="java.util.Map">
+        delete from sys_acl_module
+        where level like concat(#{level}, '%')
+        or id = #{id}
     </delete>
 
     <insert id="insert" parameterType="com.mmall.model.SysAclModule">
@@ -157,5 +186,13 @@
         operate_time = #{operateTime,jdbcType=TIMESTAMP},
         operate_ip = #{operateIp,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="batchUpdateLevel">
+        <foreach collection="moduleList" item="item" separator=";">
+            update sys_acl_module
+            set level = #{item.level}
+            where id = #{item.id}
+        </foreach>
     </update>
 </mapper>

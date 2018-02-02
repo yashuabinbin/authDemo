@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -40,10 +41,10 @@ public class SysDeptService {
         dept.setName(deptParam.getName());
         dept.setRemark(deptParam.getRemark());
         dept.setSeq(deptParam.getSeq());
-
         dept.setLevel(LevelUtil.calculateLevel(dept.getParentId(), getLevel(deptParam.getParentId())));
         dept.setOperateIp(RequestHolder.getRequestIp());
         dept.setOperator(RequestHolder.getCurrentUserName());
+        dept.setOperateTime(new Date());
         sysDeptMapper.insertSelective(dept);
     }
 
@@ -60,6 +61,7 @@ public class SysDeptService {
         }
     }
 
+    @Transactional
     public void update(DeptParam deptParam) {
         BeanValidator.check(deptParam);
 
@@ -80,6 +82,7 @@ public class SysDeptService {
         afterDept.setOperator(RequestHolder.getCurrentUserName());
         afterDept.setOperateTime(new Date());
         afterDept.setLevel(LevelUtil.calculateLevel(deptParam.getParentId(), getLevel(deptParam.getParentId())));
+
         updateWithChild(beforeDept, afterDept);
     }
 

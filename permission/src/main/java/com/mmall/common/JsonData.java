@@ -53,4 +53,11 @@ public class JsonData {
         return result;
     }
 
+    public static JsonData success() {
+        return new JsonData(true);
+    }
+
+    public static JsonData fail() {
+        return new JsonData(false);
+    }
 }
