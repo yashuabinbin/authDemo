@@ -30,10 +30,35 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="countByAclModuleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(id)
+        from sys_acl
+        where acl_module_id = #{aclModuleId}
+    </select>
+
+    <select id="selectPageByAclModuleId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl
+        where acl_module_id = #{aclModuleId}
+        limit #{pageQuery.offset}, #{pageQuery.size}
+    </select>
+
+    <select id="countByNameAndAclModuleId" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl
+        where acl_module_id = #{aclModuleId}
+        and name = #{name}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from sys_acl
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
+        delete from sys_acl
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
 
     <insert id="insert" parameterType="com.mmall.model.SysAcl">
         insert into sys_acl (id, code, name,
