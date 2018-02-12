@@ -35,7 +35,6 @@ public class SysAclService {
 
         SysAcl sysAcl = new SysAcl();
         sysAcl.setAclModuleId(aclParam.getAclModuleId());
-        sysAcl.setId(aclParam.getId());
         sysAcl.setName(aclParam.getName());
         sysAcl.setRemark(aclParam.getRemark());
         sysAcl.setSeq(aclParam.getSeq());
@@ -82,7 +81,7 @@ public class SysAclService {
 
     private String generateCode() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        return sdf.format(new Date() + "_" + (int) (Math.random() * 100));
+        return sdf.format(new Date()) + "_" + (int) (Math.random() * 100);
     }
 
     public PageResult<SysAcl> getPageByAclModuleId(Integer aclModuleId, PageQuery pageQuery) {

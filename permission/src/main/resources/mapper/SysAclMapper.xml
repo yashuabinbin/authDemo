@@ -41,12 +41,11 @@
         <include refid="Base_Column_List"/>
         from sys_acl
         where acl_module_id = #{aclModuleId}
-        limit #{pageQuery.offset}, #{pageQuery.size}
+        limit #{pageQuery.offSet}, #{pageQuery.pageSize}
     </select>
 
     <select id="countByNameAndAclModuleId" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select
-        <include refid="Base_Column_List"/>
+        select count(id)
         from sys_acl
         where acl_module_id = #{aclModuleId}
         and name = #{name}
