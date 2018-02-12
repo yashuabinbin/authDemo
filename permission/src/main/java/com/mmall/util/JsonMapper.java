@@ -63,7 +63,8 @@ public class JsonMapper {
         System.out.println(userJson);
 
         user = null;
-        user = JsonMapper.string2Obj(userJson, new TypeReference<SysUser>() {});
+        user = JsonMapper.string2Obj(userJson, new TypeReference<SysUser>() {
+        });
         System.out.println(user);
     }
 }

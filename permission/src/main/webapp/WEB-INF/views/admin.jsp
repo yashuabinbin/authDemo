@@ -231,16 +231,16 @@
         $(".popstyle").click(function () {
             var $this = $(this)
             $("iframe").attr(
-                    'src',
-                    $this.attr("data")
+                'src',
+                $this.attr("data")
             );
         });
 
         $(".direct").click(function () {
             var $this = $(this)
             $("iframe").attr(
-                    'src',
-                    $this.attr("data-value")
+                'src',
+                $this.attr("data-value")
             );
         });
     });

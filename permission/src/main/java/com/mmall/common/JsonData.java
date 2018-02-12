@@ -45,19 +45,19 @@ public class JsonData {
         return jsonData;
     }
 
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("ret", ret);
-        result.put("msg", msg);
-        result.put("data", data);
-        return result;
-    }
-
     public static JsonData success() {
         return new JsonData(true);
     }
 
     public static JsonData fail() {
         return new JsonData(false);
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("ret", ret);
+        result.put("msg", msg);
+        result.put("data", data);
+        return result;
     }
 }

@@ -24,7 +24,7 @@ public class PasswordUtil {
             "w", "x", "Y", "Z"
     };
 
-    private static final String[] num = {"2", "3", "4", "5", "6", "7", "8", "9"};
+    private static final String[] num = { "2", "3", "4", "5", "6", "7", "8", "9" };
 
     /**
      * 生成随机密码

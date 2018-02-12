@@ -5,11 +5,7 @@ import com.mmall.demo2.model.Role;
 import com.mmall.demo2.model.User;
 import com.mmall.demo2.service.UserService;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -33,7 +29,7 @@ public class AuthRealm extends AuthorizingRealm {
         List<String> roleNameList = new ArrayList<>();
         Set<Role> roleSet = user.getRoles();
         if (CollectionUtils.isNotEmpty(roleSet)) {
-            for(Role role : roleSet) {
+            for (Role role : roleSet) {
                 roleNameList.add(role.getRname());
                 Set<Permission> permissionSet = role.getPermissions();
                 if (CollectionUtils.isNotEmpty(permissionSet)) {

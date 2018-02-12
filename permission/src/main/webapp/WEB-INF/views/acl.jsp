@@ -192,6 +192,7 @@
         </li>
     {{/aclModuleList}}
 </ol>
+
 </script>
 
 <script id="aclListTemplate" type="x-tmpl-mustache">
@@ -215,10 +216,11 @@
     </td>
 </tr>
 {{/aclList}}
+
 </script>
 
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         var aclModuleList; // 存储树形权限模块列表
         var aclModuleMap = {}; // 存储map格式权限模块信息
         var aclMap = {}; // 存储map格式的权限点信息
@@ -235,8 +237,8 @@
         function loadAclModuleTree() {
             $.ajax({
                 url: "/sys/aclModule/tree.json",
-                success : function (result) {
-                    if(result.ret) {
+                success: function (result) {
+                    if (result.ret) {
                         aclModuleList = result.data;
                         var rendered = Mustache.render(aclModuleListTemplate, {
                             aclModuleList: result.data,
@@ -263,15 +265,15 @@
             $("#dialog-aclModule-form").dialog({
                 model: true,
                 title: "新增权限模块",
-                open: function(event, ui) {
+                open: function (event, ui) {
                     $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                     optionStr = "<option value=\"0\">-</option>";
                     recursiveRenderAclModuleSelect(aclModuleList, 1);
                     $("#aclModuleForm")[0].reset();
                     $("#parentId").html(optionStr);
                 },
-                buttons : {
-                    "添加": function(e) {
+                buttons: {
+                    "添加": function (e) {
                         e.preventDefault();
                         updateAclModule(true, function (data) {
                             $("#dialog-aclModule-form").dialog("close");
@@ -285,12 +287,13 @@
                 }
             });
         });
+
         function updateAclModule(isCreate, successCallback, failCallback) {
             $.ajax({
                 url: isCreate ? "/sys/aclModule/save.json" : "/sys/aclModule/update.json",
                 data: $("#aclModuleForm").serializeArray(),
                 type: 'POST',
-                success: function(result) {
+                success: function (result) {
                     if (result.ret) {
                         loadAclModuleTree();
                         if (successCallback) {
@@ -310,7 +313,7 @@
                 url: isCreate ? "/sys/acl/save.json" : "/sys/acl/update.json",
                 data: $("#aclForm").serializeArray(),
                 type: 'POST',
-                success: function(result) {
+                success: function (result) {
                     if (result.ret) {
                         loadAclList(lastClickAclModuleId);
                         if (successCallback) {
@@ -332,7 +335,7 @@
                     aclModuleMap[aclModule.id] = aclModule;
                     var blank = "";
                     if (level > 1) {
-                        for(var j = 3; j <= level; j++) {
+                        for (var j = 3; j <= level; j++) {
                             blank += "..";
                         }
                         blank += "∟";
@@ -370,17 +373,17 @@
 
         function bindAclModuleClick() {
             $(".sub-aclModule").click(function (e) {
-               e.preventDefault();
-               e.stopPropagation();
-               $(this).parent().parent().parent().children().children(".aclModule-name").toggleClass("hidden");
-               if($(this).is(".fa-angle-double-down")) {
-                   $(this).removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
-               } else{
-                   $(this).removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
-               }
+                e.preventDefault();
+                e.stopPropagation();
+                $(this).parent().parent().parent().children().children(".aclModule-name").toggleClass("hidden");
+                if ($(this).is(".fa-angle-double-down")) {
+                    $(this).removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+                } else {
+                    $(this).removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+                }
             });
 
-            $(".aclModule-name").click(function(e) {
+            $(".aclModule-name").click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var aclModuleId = $(this).attr("data-id");
@@ -410,14 +413,14 @@
                 }
             });
 
-            $(".aclModule-edit").click(function(e) {
+            $(".aclModule-edit").click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var aclModuleId = $(this).attr("data-id");
                 $("#dialog-aclModule-form").dialog({
                     model: true,
                     title: "编辑权限模块",
-                    open: function(event, ui) {
+                    open: function (event, ui) {
                         $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                         optionStr = "<option value=\"0\">-</option>";
                         recursiveRenderAclModuleSelect(aclModuleList, 1);
@@ -433,8 +436,8 @@
                             $("#aclModuleStatus").val(targetAclModule.status);
                         }
                     },
-                    buttons : {
-                        "更新": function(e) {
+                    buttons: {
+                        "更新": function (e) {
                             e.preventDefault();
                             updateAclModule(false, function (data) {
                                 $("#dialog-aclModule-form").dialog("close");
@@ -468,7 +471,7 @@
             var url = "/sys/acl/page.json?aclModuleId=" + aclModuleId;
             var pageNo = $("#aclPage .pageNo").val() || 1;
             $.ajax({
-                url : url,
+                url: url,
                 data: {
                     pageSize: pageSize,
                     pageNo: pageNo
@@ -480,25 +483,25 @@
         }
 
         function renderAclListAndPage(result, url) {
-            if(result.ret) {
-                if (result.data.total > 0){
+            if (result.ret) {
+                if (result.data.total > 0) {
                     var rendered = Mustache.render(aclListTemplate, {
                         aclList: result.data.data,
                         "showAclModuleName": function () {
                             return aclModuleMap[this.aclModuleId].name;
                         },
-                        "showStatus": function() {
-                            return this.status == 1 ? "有效": "无效";
+                        "showStatus": function () {
+                            return this.status == 1 ? "有效" : "无效";
                         },
-                        "showType": function() {
+                        "showType": function () {
                             return this.type == 1 ? "菜单" : (this.type == 2 ? "按钮" : "其他");
                         },
-                        "bold": function() {
-                            return function(text, render) {
+                        "bold": function () {
+                            return function (text, render) {
                                 var status = render(text);
                                 if (status == '有效') {
                                     return "<span class='label label-sm label-success'>有效</span>";
-                                } else if(status == '无效') {
+                                } else if (status == '无效') {
                                     return "<span class='label label-sm label-warning'>无效</span>";
                                 } else {
                                     return "<span class='label'>删除</span>";
@@ -508,7 +511,7 @@
                     });
                     $("#aclList").html(rendered);
                     bindAclClick();
-                    $.each(result.data.data, function(i, acl) {
+                    $.each(result.data.data, function (i, acl) {
                         aclMap[acl.id] = acl;
                     })
                 } else {
@@ -532,7 +535,7 @@
                     data: {
                         aclId: aclId
                     },
-                    success: function(result) {
+                    success: function (result) {
                         if (result.ret) {
                             console.log(result)
                         } else {
@@ -541,14 +544,14 @@
                     }
                 })
             });
-            $(".acl-edit").click(function(e) {
+            $(".acl-edit").click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 var aclId = $(this).attr("data-id");
                 $("#dialog-acl-form").dialog({
                     model: true,
                     title: "编辑权限",
-                    open: function(event, ui) {
+                    open: function (event, ui) {
                         $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                         optionStr = "";
                         recursiveRenderAclModuleSelect(aclModuleList, 1);
@@ -566,8 +569,8 @@
                             $("#aclRemark").val(targetAcl.remark);
                         }
                     },
-                    buttons : {
-                        "更新": function(e) {
+                    buttons: {
+                        "更新": function (e) {
                             e.preventDefault();
                             updateAcl(false, function (data) {
                                 $("#dialog-acl-form").dialog("close");
@@ -583,19 +586,19 @@
             })
         }
 
-        $(".acl-add").click(function() {
+        $(".acl-add").click(function () {
             $("#dialog-acl-form").dialog({
                 model: true,
                 title: "新增权限",
-                open: function(event, ui) {
+                open: function (event, ui) {
                     $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                     optionStr = "";
                     recursiveRenderAclModuleSelect(aclModuleList, 1);
                     $("#aclForm")[0].reset();
                     $("#aclModuleSelectId").html(optionStr);
                 },
-                buttons : {
-                    "添加": function(e) {
+                buttons: {
+                    "添加": function (e) {
                         e.preventDefault();
                         updateAcl(true, function (data) {
                             $("#dialog-acl-form").dialog("close");

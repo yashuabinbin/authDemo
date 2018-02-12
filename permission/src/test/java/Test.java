@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Test {
 
     @org.junit.Test
-    public void testLog(){
+    public void testLog() {
         log.info("info");
         log.debug("debug");
         log.warn("warn");

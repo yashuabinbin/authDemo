@@ -18,12 +18,12 @@
     </appender>
     <!---->
     <!--<logger name="xxx" level="INFO">-->
-        <!--<appender-ref ref="permission"/>-->
+    <!--<appender-ref ref="permission"/>-->
     <!--</logger>-->
 
     <!-- TRACE < DEBUG < INFO < WARN < ERROR -->
     <root level="DEBUG">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
     </root>
 
     <logger name="com.mmall.dao.*" level="DEBUG"/>

@@ -99,7 +99,7 @@ public class SysUserService {
     public PageResult<SysUser> getPageByDepId(Integer depId, PageQuery pageQuery) {
         BeanValidator.check(pageQuery);
         int count = sysUserMapper.countByDepId(depId);
-        if(count > 0) {
+        if (count > 0) {
             List<SysUser> userList = sysUserMapper.selectPageByDepId(depId, pageQuery);
             PageResult<SysUser> pageResult = new PageResult();
             pageResult.setTotal(count);

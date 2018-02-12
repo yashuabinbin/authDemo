@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>角色</title>
-    <jsp:include page="/common/backend_common.jsp" />
+    <jsp:include page="/common/backend_common.jsp"/>
     <link rel="stylesheet" href="/ztree/zTreeStyle.css" type="text/css">
     <link rel="stylesheet" href="/assets/css/bootstrap-duallistbox.min.css" type="text/css">
     <script type="text/javascript" src="/ztree/jquery.ztree.all.min.js"></script>
@@ -11,6 +11,7 @@
         .bootstrap-duallistbox-container .moveall, .bootstrap-duallistbox-container .removeall {
             width: 50%;
         }
+
         .bootstrap-duallistbox-container .move, .bootstrap-duallistbox-container .remove {
             width: 49%;
         }
@@ -60,12 +61,12 @@
                     </button>
                 </div>
 
-                <div id="roleUserTab" class="tab-pane fade" >
+                <div id="roleUserTab" class="tab-pane fade">
                     <div class="row">
                         <div class="box1 col-md-6">待选用户列表</div>
                         <div class="box1 col-md-6">已选用户列表</div>
                     </div>
-                    <select multiple="multiple" size="10" name="roleUserList" id="roleUserList" >
+                    <select multiple="multiple" size="10" name="roleUserList" id="roleUserList">
                     </select>
                     <div class="hr hr-16 hr-dotted"></div>
                     <button class="btn btn-info saveRoleUser" type="button">
@@ -121,18 +122,21 @@
         </li>
     {{/roleList}}
 </ol>
+
 </script>
 
 <script id="selectedUsersTemplate" type="x-tmpl-mustache">
 {{#userList}}
     <option value="{{id}}" selected="selected">{{username}}</option>
 {{/userList}}
+
 </script>
 
 <script id="unSelectedUsersTemplate" type="x-tmpl-mustache">
 {{#userList}}
     <option value="{{id}}">{{username}}</option>
 {{/userList}}
+
 </script>
 
 <script type="text/javascript">
@@ -141,14 +145,14 @@
         var lastRoleId = -1;
         var selectFirstTab = true;
         var hasMultiSelect = false;
-        
+
         var roleListTemplate = $("#roleListTemplate").html();
         Mustache.parse(roleListTemplate);
         var selectedUsersTemplate = $("#selectedUsersTemplate").html();
         Mustache.parse(selectedUsersTemplate);
         var unSelectedUsersTemplate = $("#unSelectedUsersTemplate").html();
         Mustache.parse(unSelectedUsersTemplate);
-        
+
         loadRoleList();
 
         // zTree
@@ -180,7 +184,7 @@
             var zTree = $.fn.zTree.getZTreeObj("roleAclTree");
             zTree.expandNode(treeNode);
         }
-        
+
         function loadRoleList() {
             $.ajax({
                 url: "/sys/role/list.json",
@@ -189,7 +193,7 @@
                         var rendered = Mustache.render(roleListTemplate, {roleList: result.data});
                         $("#roleList").html(rendered);
                         bindRoleClick();
-                        $.each(result.data, function(i, role) {
+                        $.each(result.data, function (i, role) {
                             roleMap[role.id] = role;
                         });
                     } else {
@@ -198,6 +202,7 @@
                 }
             });
         }
+
         function bindRoleClick() {
             $(".role-edit").click(function (e) {
                 e.preventDefault();
@@ -206,7 +211,7 @@
                 $("#dialog-role-form").dialog({
                     model: true,
                     title: "修改角色",
-                    open: function(event, ui) {
+                    open: function (event, ui) {
                         $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                         $("#roleForm")[0].reset();
                         var targetRole = roleMap[roleId];
@@ -217,8 +222,8 @@
                             $("#roleRemark").val(targetRole.remark);
                         }
                     },
-                    buttons : {
-                        "修改": function(e) {
+                    buttons: {
+                        "修改": function (e) {
                             e.preventDefault();
                             updateRole(false, function (data) {
                                 $("#dialog-role-form").dialog("close");
@@ -233,10 +238,10 @@
                 })
             });
             $(".role-name").click(function (e) {
-               e.preventDefault();
-               e.stopPropagation();
-               var roleId = $(this).attr("data-id");
-               handleRoleSelected(roleId);
+                e.preventDefault();
+                e.stopPropagation();
+                var roleId = $(this).attr("data-id");
+                handleRoleSelected(roleId);
             });
         }
 
@@ -263,7 +268,7 @@
             }
             $.ajax({
                 url: "/sys/role/roleTree.json",
-                data : {
+                data: {
                     roleId: selectedRoleId
                 },
                 type: 'POST',
@@ -281,18 +286,18 @@
             var treeObj = $.fn.zTree.getZTreeObj("roleAclTree");
             var nodes = treeObj.getCheckedNodes(true);
             var v = "";
-            for(var i = 0; i < nodes.length; i++) {
-                if(nodes[i].id.startsWith(aclPrefix)) {
+            for (var i = 0; i < nodes.length; i++) {
+                if (nodes[i].id.startsWith(aclPrefix)) {
                     v += "," + nodes[i].dataId;
                 }
             }
-            return v.length > 0 ? v.substring(1): v;
+            return v.length > 0 ? v.substring(1) : v;
         }
 
         function renderRoleTree(aclModuleList) {
             zTreeObj = [];
             recursivePrepareTreeData(aclModuleList);
-            for(var key in nodeMap) {
+            for (var key in nodeMap) {
                 zTreeObj.push(nodeMap[key]);
             }
             $.fn.zTree.init($("#roleAclTree"), setting, zTreeObj);
@@ -301,10 +306,10 @@
         function recursivePrepareTreeData(aclModuleList) {
             // prepare nodeMap
             if (aclModuleList && aclModuleList.length > 0) {
-                $(aclModuleList).each(function(i, aclModule) {
+                $(aclModuleList).each(function (i, aclModule) {
                     var hasChecked = false;
                     if (aclModule.aclList && aclModule.aclList.length > 0) {
-                        $(aclModule.aclList).each(function(i, acl) {
+                        $(aclModule.aclList).each(function (i, acl) {
                             zTreeObj.push({
                                 id: aclPrefix + acl.id,
                                 pId: modulePrefix + acl.aclModuleId,
@@ -313,7 +318,7 @@
                                 checked: acl.checked,
                                 dataId: acl.id
                             });
-                            if(acl.checked) {
+                            if (acl.checked) {
                                 hasChecked = true;
                             }
                         });
@@ -321,14 +326,14 @@
                     if ((aclModule.aclModuleList && aclModule.aclModuleList.length > 0) ||
                         (aclModule.aclList && aclModule.aclList.length > 0)) {
                         nodeMap[modulePrefix + aclModule.id] = {
-                            id : modulePrefix + aclModule.id,
+                            id: modulePrefix + aclModule.id,
                             pId: modulePrefix + aclModule.parentId,
                             name: aclModule.name,
                             open: hasChecked
                         };
                         var tempAclModule = nodeMap[modulePrefix + aclModule.id];
-                        while(hasChecked && tempAclModule) {
-                            if(tempAclModule) {
+                        while (hasChecked && tempAclModule) {
+                            if (tempAclModule) {
                                 nodeMap[tempAclModule.id] = {
                                     id: tempAclModule.id,
                                     pId: tempAclModule.pId,
@@ -343,17 +348,17 @@
                 });
             }
         }
-        
+
         $(".role-add").click(function () {
             $("#dialog-role-form").dialog({
                 model: true,
                 title: "新增角色",
-                open: function(event, ui) {
+                open: function (event, ui) {
                     $(".ui-dialog-titlebar-close", $(this).parent()).hide();
                     $("#roleForm")[0].reset();
                 },
-                buttons : {
-                    "添加": function(e) {
+                buttons: {
+                    "添加": function (e) {
                         e.preventDefault();
                         updateRole(true, function (data) {
                             $("#dialog-role-form").dialog("close");
@@ -396,7 +401,7 @@
                 url: isCreate ? "/sys/role/save.json" : "/sys/role/update.json",
                 data: $("#roleForm").serializeArray(),
                 type: 'POST',
-                success: function(result) {
+                success: function (result) {
                     if (result.ret) {
                         loadRoleList();
                         if (successCallback) {
@@ -410,9 +415,10 @@
                 }
             })
         }
-        $("#roleTab a[data-toggle='tab']").on("shown.bs.tab", function(e) {
-            if(lastRoleId == -1) {
-                showMessage("加载角色关系","请先在左侧选择操作的角色", false);
+
+        $("#roleTab a[data-toggle='tab']").on("shown.bs.tab", function (e) {
+            if (lastRoleId == -1) {
+                showMessage("加载角色关系", "请先在左侧选择操作的角色", false);
                 return;
             }
             if (e.target.getAttribute("href") == '#roleAclTab') {
@@ -437,7 +443,7 @@
                         var renderedUnSelect = Mustache.render(unSelectedUsersTemplate, {userList: result.data.unselected});
                         $("#roleUserList").html(renderedSelect + renderedUnSelect);
 
-                        if(!hasMultiSelect) {
+                        if (!hasMultiSelect) {
                             $('select[name="roleUserList"]').bootstrapDualListbox({
                                 showFilterInputs: false,
                                 moveOnSelect: false,

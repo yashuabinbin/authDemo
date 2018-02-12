@@ -7,10 +7,10 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan
-@MapperScan(basePackages = {"com.mmall.demo2.mapper"})
+@MapperScan(basePackages = { "com.mmall.demo2.mapper" })
 public class Demo2Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Demo2Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Demo2Application.class, args);
+    }
 }

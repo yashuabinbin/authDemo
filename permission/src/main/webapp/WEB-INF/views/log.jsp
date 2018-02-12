@@ -46,11 +46,16 @@
                                         <option value="7">角色用户关系</option>
                                     </select></label>
 
-                                <input id="search-operator" type="search" name="operator" class="form-control input-sm" placeholder="操作者" aria-controls="dynamic-table">
-                                <input id="search-before" type="search" name="beforeSeg" class="form-control input-sm" placeholder="操作前的值" aria-controls="dynamic-table">
-                                <input id="search-after" type="search" name="afterSeg" class="form-control input-sm" placeholder="操作后的值" aria-controls="dynamic-table">
-                                <input id="search-from"type="search" name="fromTime" class="form-control input-sm" placeholder="开始时间" aria-controls="dynamic-table"> ~
-                                <input id="search-to" type="search" name="toTime" class="form-control input-sm" placeholder="结束时间" aria-controls="dynamic-table">
+                                <input id="search-operator" type="search" name="operator" class="form-control input-sm" placeholder="操作者"
+                                       aria-controls="dynamic-table">
+                                <input id="search-before" type="search" name="beforeSeg" class="form-control input-sm" placeholder="操作前的值"
+                                       aria-controls="dynamic-table">
+                                <input id="search-after" type="search" name="afterSeg" class="form-control input-sm" placeholder="操作后的值"
+                                       aria-controls="dynamic-table">
+                                <input id="search-from" type="search" name="fromTime" class="form-control input-sm" placeholder="开始时间"
+                                       aria-controls="dynamic-table"> ~
+                                <input id="search-to" type="search" name="toTime" class="form-control input-sm" placeholder="结束时间"
+                                       aria-controls="dynamic-table">
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <button class="btn btn-info fa fa-check research" style="margin-bottom: 6px;" type="button">
                                     刷新
@@ -106,7 +111,8 @@
     </td>
 </tr>
 {{/logList}}
-</script>
+
+    </script>
 
     <script type="text/javascript">
         $(function () {
@@ -137,8 +143,8 @@
                         pageNo: pageNo,
                         pageSize: pageSize,
                         beforeSeg: beforeSeg,
-                        afterSeg : afterSeg,
-                        operator : operator,
+                        afterSeg: afterSeg,
+                        operator: operator,
                         fromTime: fromTime,
                         toTime: toTime,
                         type: type
@@ -159,19 +165,34 @@
                                 return function (text, render) {
                                     var typeStr = "";
                                     switch (this.type) {
-                                        case 1: typeStr = "部门";break;
-                                        case 2: typeStr = "用户";break;
-                                        case 3: typeStr = "权限模块";break;
-                                        case 4: typeStr = "权限点";break;
-                                        case 5: typeStr = "角色";break;
-                                        case 6: typeStr = "角色权限关系";break;
-                                        case 7: typeStr = "角色用户关系";break;
-                                        default: typeStr = "未知";
+                                        case 1:
+                                            typeStr = "部门";
+                                            break;
+                                        case 2:
+                                            typeStr = "用户";
+                                            break;
+                                        case 3:
+                                            typeStr = "权限模块";
+                                            break;
+                                        case 4:
+                                            typeStr = "权限点";
+                                            break;
+                                        case 5:
+                                            typeStr = "角色";
+                                            break;
+                                        case 6:
+                                            typeStr = "角色权限关系";
+                                            break;
+                                        case 7:
+                                            typeStr = "角色用户关系";
+                                            break;
+                                        default:
+                                            typeStr = "未知";
                                     }
                                     return typeStr;
                                 }
                             },
-                            "showDate" :function () {
+                            "showDate": function () {
                                 return function (text, render) {
                                     return new Date(this.operateTime).Format("yyyy-MM-dd hh:mm:ss");
                                 }
@@ -226,6 +247,7 @@
                     }
                 });
             }
+
             Date.prototype.Format = function (fmt) { //author: meizz
                 var o = {
                     "M+": this.getMonth() + 1, //月份
@@ -241,8 +263,8 @@
                     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
                 return fmt;
             };
-            var formatJson = function(json, options) {
-                if(json == '') return '';
+            var formatJson = function (json, options) {
+                if (json == '') return '';
                 var reg = null,
                     formatted = '',
                     pad = 0,
@@ -297,7 +319,7 @@
                     json = json.replace(reg, ': ');
                 }
 
-                $.each(json.split('\r\n'), function(index, node) {
+                $.each(json.split('\r\n'), function (index, node) {
                     var i = 0,
                         indent = 0,
                         padding = '';

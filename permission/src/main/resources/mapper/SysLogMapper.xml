@@ -156,13 +156,13 @@
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.mmall.model.SysLogWithBLOBs">
         update sys_log
         set type = #{type,jdbcType=INTEGER},
-          target_id = #{targetId,jdbcType=INTEGER},
-          operator = #{operator,jdbcType=VARCHAR},
-          operate_time = #{operateTime,jdbcType=TIMESTAMP},
-          operate_ip = #{operateIp,jdbcType=VARCHAR},
-          status = #{status,jdbcType=INTEGER},
-          old_value = #{oldValue,jdbcType=LONGVARCHAR},
-          new_value = #{newValue,jdbcType=LONGVARCHAR}
+        target_id = #{targetId,jdbcType=INTEGER},
+        operator = #{operator,jdbcType=VARCHAR},
+        operate_time = #{operateTime,jdbcType=TIMESTAMP},
+        operate_ip = #{operateIp,jdbcType=VARCHAR},
+        status = #{status,jdbcType=INTEGER},
+        old_value = #{oldValue,jdbcType=LONGVARCHAR},
+        new_value = #{newValue,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 

@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 public class TestController {
 
     @Bean
-    public ViewResolver getViewResolver(){
+    public ViewResolver getViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/pages/");
         resolver.setSuffix(".jsp");
@@ -65,8 +65,8 @@ public class TestController {
 
     @RequestMapping("/loginUser")
     public String loginUser(@RequestParam("username") String username,
-                            @RequestParam("password") String password,
-                            HttpSession session) {
+            @RequestParam("password") String password,
+            HttpSession session) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         Subject subject = SecurityUtils.getSubject();
         try {

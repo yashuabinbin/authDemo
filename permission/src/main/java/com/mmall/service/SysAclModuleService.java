@@ -154,7 +154,7 @@ public class SysAclModuleService {
         if (module == null)
             throw new ParamException("该权限模块不存在");
 
-        String level= module.getLevel() + LevelUtil.SEPERATOR + module.getId();
+        String level = module.getLevel() + LevelUtil.SEPERATOR + module.getId();
         sysAclModuleMapper.deleteSelfAndChildrenByLevel(level, module.getId());
     }
 }

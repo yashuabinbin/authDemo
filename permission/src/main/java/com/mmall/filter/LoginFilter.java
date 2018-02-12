@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "loginFilter", urlPatterns = {"/sys/*", "/admin/*"})
+@WebFilter(filterName = "loginFilter", urlPatterns = { "/sys/*", "/admin/*" })
 public class LoginFilter implements Filter {
 
     @Override
