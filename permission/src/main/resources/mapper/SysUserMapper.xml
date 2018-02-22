@@ -70,6 +70,22 @@
         limit #{pageQuery.offSet}, #{pageQuery.pageSize}
     </select>
 
+    <select id="selectByUserIdList" parameterType="java.util.List" resultType="com.mmall.model.SysUser">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where id in
+        <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_user
         where id = #{id,jdbcType=INTEGER}

@@ -29,10 +29,21 @@
         where user_id = #{userId}
     </select>
 
+    <select id="selectUserIdListByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select user_id
+        from sys_role_user
+        where role_id = #{roleId}
+    </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_role_user
         where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deleteByRoleId">
+        delete from sys_role_user
+        where role_id = #{roleId}
     </delete>
 
     <insert id="insert" parameterType="com.mmall.model.SysRoleUser">
@@ -86,6 +97,15 @@
                 #{operateIp,jdbcType=VARCHAR},
             </if>
         </trim>
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into sys_role_user
+        values
+        <foreach collection="roleUserList" item="roleUser" separator=",">
+            (#{roleUser.id,jdbcType=INTEGER}, #{roleUser.roleId,jdbcType=INTEGER}, #{roleUser.userId,jdbcType=INTEGER},
+            #{roleUser.operator,jdbcType=VARCHAR}, #{roleUser.operateTime,jdbcType=TIMESTAMP}, #{roleUser.operateIp,jdbcType=VARCHAR})
+        </foreach>
     </insert>
 
     <update id="updateByPrimaryKeySelective" parameterType="com.mmall.model.SysRoleUser">

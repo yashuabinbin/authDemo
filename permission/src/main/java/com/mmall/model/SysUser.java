@@ -11,6 +11,15 @@ import java.util.Date;
 @AllArgsConstructor
 public class SysUser {
 
+    // 正常
+    public final static int STATUS_USE = 1;
+
+    // 冻结
+    public final static int STATUS_FREEZE = 0;
+
+    // 删除
+    public final static int STATUS_DELETE = 2;
+
     private Integer id;
 
     private String username;

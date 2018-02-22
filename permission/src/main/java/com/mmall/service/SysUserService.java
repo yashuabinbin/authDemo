@@ -109,4 +109,13 @@ public class SysUserService {
 
         return new PageResult<SysUser>();
     }
+
+    /**
+     * 获取所有角色
+     *
+     * @return
+     */
+    public List<SysUser> getAll() {
+        return sysUserMapper.selectAll();
+    }
 }

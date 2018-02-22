@@ -7,10 +7,9 @@
 package com.mmall.controller;
 
 import com.mmall.common.JsonData;
+import com.mmall.model.SysUser;
 import com.mmall.param.RoleParam;
-import com.mmall.service.SysRoleAclService;
-import com.mmall.service.SysRoleService;
-import com.mmall.service.SysTreeService;
+import com.mmall.service.*;
 import com.mmall.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/sys/role")
@@ -33,6 +33,12 @@ public class SysRoleController {
 
     @Autowired
     private SysRoleAclService sysRoleAclService;
+
+    @Autowired
+    private SysRoleUserService sysRoleUserService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 跳转到角色页面
@@ -109,4 +115,47 @@ public class SysRoleController {
         return JsonData.success();
     }
 
+    /**
+     * 根据角色id获取用户列表
+     *
+     * @param roleId
+     * @return
+     */
+    @RequestMapping(value = "/users.json")
+    @ResponseBody
+    public JsonData users(@RequestParam(value = "roleId") Integer roleId) {
+        List<SysUser> selectedUserList = sysRoleUserService.getUserListByRoleId(roleId);
+        List<SysUser> allUserList = sysUserService.getAll();
+
+        Set<Integer> selectedUserIdSet = selectedUserList.stream()
+                .map(user -> user.getId()).collect(Collectors.toSet());
+
+        List<SysUser> unselectedUserList = new ArrayList<>();
+        for (SysUser user : allUserList) {
+            if (user.getStatus() == SysUser.STATUS_USE && !selectedUserIdSet.contains(user.getId())) {
+                unselectedUserList.add(user);
+            }
+        }
+
+        Map<String, List<SysUser>> returnMap = new HashMap<>();
+        returnMap.put("selected", selectedUserList);
+        returnMap.put("unselected", unselectedUserList);
+        return JsonData.success(returnMap);
+    }
+
+    /**
+     * 改变角色与用户的联系
+     *
+     * @param roleId
+     * @param userIds
+     * @return
+     */
+    @RequestMapping(value = "/changeUsers.json")
+    @ResponseBody
+    public JsonData changeUsers(@RequestParam(value = "roleId") Integer roleId,
+            @RequestParam(value = "userIds", required = false, defaultValue = "") String userIds) {
+        List<Integer> userIdList = StringUtil.split2ListInt(userIds, ",");
+        sysRoleUserService.changeRoleUsers(roleId, userIdList);
+        return JsonData.success();
+    }
 }
