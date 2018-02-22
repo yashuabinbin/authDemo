@@ -44,6 +44,12 @@
         limit #{pageQuery.offSet}, #{pageQuery.pageSize}
     </select>
 
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM sys_acl
+    </select>
+
     <select id="countByNameAndAclModuleId" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(id)
         from sys_acl
@@ -52,6 +58,13 @@
         <if test="id != null">
             and id != #{id}
         </if>
+    </select>
+
+    <select id="selectByIdList" parameterType="java.util.List" resultType="com.mmall.model.SysAcl">
+        select * from sys_acl where id in
+        <foreach collection="idList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -20,6 +20,8 @@ public class AclModuleLevelDto extends SysAclModule implements Comparable<SysAcl
 
     private List<AclModuleLevelDto> aclModuleList = Lists.newArrayList();
 
+    private List<AclDto> aclDtoList = Lists.newArrayList();
+
     public static AclModuleLevelDto adapt(SysAclModule module) {
         AclModuleLevelDto dto = new AclModuleLevelDto();
         BeanUtils.copyProperties(module, dto);

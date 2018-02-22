@@ -2,6 +2,7 @@ package com.mmall.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -9,7 +10,14 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = { "id" })
 public class SysAcl {
+
+    // 权限在用
+    public static final int STATUS_USE = 1;
+
+    // 权限冻结
+    public static final int STATUS_FREEZE = 0;
 
     private Integer id;
 
