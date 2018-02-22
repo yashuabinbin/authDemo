@@ -285,6 +285,8 @@
         function getTreeSelectedId() {
             var treeObj = $.fn.zTree.getZTreeObj("roleAclTree");
             var nodes = treeObj.getCheckedNodes(true);
+            console.info(nodes);
+
             var v = "";
             for (var i = 0; i < nodes.length; i++) {
                 if (nodes[i].id.startsWith(aclPrefix)) {

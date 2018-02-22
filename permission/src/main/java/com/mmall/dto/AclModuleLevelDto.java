@@ -10,17 +10,21 @@ import com.google.common.collect.Lists;
 import com.mmall.model.SysAclModule;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class AclModuleLevelDto extends SysAclModule implements Comparable<SysAclModule> {
 
+    // 下一层的AclModule列表
     private List<AclModuleLevelDto> aclModuleList = Lists.newArrayList();
 
-    private List<AclDto> aclDtoList = Lists.newArrayList();
+    // 该AclModule模块下的acl具体的权限列表
+    private List<AclDto> aclList = Lists.newArrayList();
 
     public static AclModuleLevelDto adapt(SysAclModule module) {
         AclModuleLevelDto dto = new AclModuleLevelDto();

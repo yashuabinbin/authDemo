@@ -8,14 +8,18 @@ package com.mmall.controller;
 
 import com.mmall.common.JsonData;
 import com.mmall.param.RoleParam;
+import com.mmall.service.SysRoleAclService;
 import com.mmall.service.SysRoleService;
 import com.mmall.service.SysTreeService;
+import com.mmall.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/sys/role")
@@ -26,6 +30,9 @@ public class SysRoleController {
 
     @Autowired
     private SysTreeService sysTreeService;
+
+    @Autowired
+    private SysRoleAclService sysRoleAclService;
 
     /**
      * 跳转到角色页面
@@ -80,9 +87,26 @@ public class SysRoleController {
      * @param roleId
      * @return
      */
-    @RequestMapping(value = "/role/tree.json")
+    @RequestMapping(value = "/roleTree.json")
     @ResponseBody
     public JsonData roleTree(@RequestParam("roleId") Integer roleId) {
         return JsonData.success(sysTreeService.roleTree(roleId));
     }
+
+    /**
+     * 改变权限选择
+     *
+     * @param roleId
+     * @param aclIds
+     * @return
+     */
+    @RequestMapping(value = "/changeAcls.json")
+    @ResponseBody
+    public JsonData changeAcls(@RequestParam(value = "roleId") Integer roleId,
+            @RequestParam(value = "aclIds", required = false, defaultValue = "") String aclIds) {
+        List<Integer> aclIdList = StringUtil.split2ListInt(aclIds, ",");
+        sysRoleAclService.changeRoleAcls(roleId, aclIdList);
+        return JsonData.success();
+    }
+
 }

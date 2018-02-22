@@ -37,7 +37,7 @@
         </if>
     </select>
 
-    <select id="getChildModuleListByLevel" parameterType="java.util.Map" resultType="com.mmall.model.SysAclModule">
+    <select id="selectChildModuleListByLevel" parameterType="java.util.Map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_acl_module

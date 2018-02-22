@@ -37,6 +37,11 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
+    <delete id="deleteByRoleId" parameterType="java.lang.Integer">
+        delete from sys_role_acl
+        where role_id = #{roleId}
+    </delete>
+
     <insert id="insert" parameterType="com.mmall.model.SysRoleAcl">
         insert into sys_role_acl (id, role_id, acl_id,
         operator, operate_time, operate_ip
@@ -88,6 +93,15 @@
                 #{operateIp,jdbcType=VARCHAR},
             </if>
         </trim>
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into sys_role_acl
+        values
+        <foreach collection="roleAclList" item="roleAcl" separator=",">
+            (#{roleAcl.id,jdbcType=INTEGER}, #{roleAcl.roleId,jdbcType=INTEGER}, #{roleAcl.aclId,jdbcType=INTEGER},
+            #{roleAcl.operator,jdbcType=VARCHAR}, #{roleAcl.operateTime,jdbcType=TIMESTAMP}, #{roleAcl.operateIp,jdbcType=VARCHAR})
+        </foreach>
     </insert>
 
     <update id="updateByPrimaryKeySelective" parameterType="com.mmall.model.SysRoleAcl">

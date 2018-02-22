@@ -21,7 +21,7 @@ public interface SysAclModuleMapper {
 
     boolean countByNameAndParentId(@Param("name") String name, @Param("parentId") Integer parentId, @Param("id") Integer id);
 
-    List<SysAclModule> getChildModuleListByLevel(@Param("level") String level);
+    List<SysAclModule> selectChildModuleListByLevel(@Param("level") String level);
 
     void batchUpdateLevel(@Param("moduleList") List<SysAclModule> moduleList);
 

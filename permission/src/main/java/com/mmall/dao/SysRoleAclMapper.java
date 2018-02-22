@@ -20,4 +20,8 @@ public interface SysRoleAclMapper {
     int updateByPrimaryKey(SysRoleAcl record);
 
     List<Integer> selectAclIdListByRoleIdList(@Param("roleIdList") List<Integer> roleIdList);
+
+    int deleteByRoleId(@Param("roleId") Integer roleId);
+
+    int insertBatch(@Param("roleAclList") List<SysRoleAcl> roleAclList);
 }

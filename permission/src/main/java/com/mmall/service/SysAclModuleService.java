@@ -97,7 +97,7 @@ public class SysAclModuleService {
         String oldLevelPrefix = beforeModule.getLevel();
 
         if (!newLevelPrefix.equals(oldLevelPrefix)) {
-            List<SysAclModule> moduleList = sysAclModuleMapper.getChildModuleListByLevel(oldLevelPrefix);
+            List<SysAclModule> moduleList = sysAclModuleMapper.selectChildModuleListByLevel(oldLevelPrefix);
             if (CollectionUtils.isNotEmpty(moduleList)) {
                 for (SysAclModule module : moduleList) {
                     String level = module.getLevel();
@@ -114,12 +114,24 @@ public class SysAclModuleService {
         sysAclModuleMapper.updateByPrimaryKeySelective(afterModule);
     }
 
+    /**
+     * 获取权限树
+     *
+     * @return
+     */
     public List<AclModuleLevelDto> aclModuleTree() {
+        //获取所有aclModule
         List<SysAclModule> aclModuleList = sysAclModuleMapper.selectAllAclModule();
         List<AclModuleLevelDto> dtoList = aclModuleList.stream().map(aclModule -> AclModuleLevelDto.adapt(aclModule)).collect(Collectors.toList());
         return aclModuleListToTree(dtoList);
     }
 
+    /**
+     * 拼凑权限模块树
+     *
+     * @param dtoList
+     * @return
+     */
     private List<AclModuleLevelDto> aclModuleListToTree(List<AclModuleLevelDto> dtoList) {
         Multimap<String, AclModuleLevelDto> levelAclModuleMap = ArrayListMultimap.create();
 
@@ -128,11 +140,23 @@ public class SysAclModuleService {
         }
 
         dtoList.forEach(dto -> levelAclModuleMap.put(dto.getLevel(), dto));
-        dtoList = dtoList.stream().filter(dto -> dto.getLevel().equals(LevelUtil.ROOT)).sorted().collect(Collectors.toList());
+        dtoList = dtoList.stream()
+                .filter(dto -> dto.getLevel().equals(LevelUtil.ROOT))
+                .sorted()
+                .collect(Collectors.toList());
+
+        // 转换权限模块树
         transformAclModuleTree(dtoList, LevelUtil.ROOT, levelAclModuleMap);
         return dtoList;
     }
 
+    /**
+     * 转换权限模块树
+     *
+     * @param dtoList
+     * @param level
+     * @param levelAclModuleMap
+     */
     private void transformAclModuleTree(List<AclModuleLevelDto> dtoList, String level, Multimap<String, AclModuleLevelDto> levelAclModuleMap) {
         if (CollectionUtils.isEmpty(dtoList))
             return;
@@ -149,6 +173,11 @@ public class SysAclModuleService {
         });
     }
 
+    /**
+     * 删除权限模块
+     *
+     * @param moduleId
+     */
     public void delete(Integer moduleId) {
         SysAclModule module = sysAclModuleMapper.selectByPrimaryKey(moduleId);
         if (module == null)

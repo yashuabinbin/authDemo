@@ -78,6 +78,9 @@ public class SysCoreService {
 
     public boolean isSuperAdmin() {
         SysUser user = RequestHolder.getCurrentUser();
+        if (user.getUsername().equals("Admin")) {
+            return true;
+        }
         return false;
     }
 }
