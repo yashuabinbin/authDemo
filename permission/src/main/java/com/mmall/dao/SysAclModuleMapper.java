@@ -28,4 +28,6 @@ public interface SysAclModuleMapper {
     List<SysAclModule> selectAllAclModule();
 
     void deleteSelfAndChildrenByLevel(@Param("level") String level, @Param("id") Integer id);
+
+    int countByParentId(@Param("moduleId") Integer moduleId);
 }

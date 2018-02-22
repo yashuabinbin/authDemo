@@ -286,6 +286,8 @@
                         $("#parentId").html(optionStr);
                         $("#deptId").val(deptId);
                         var targetDept = deptMap[deptId];
+
+                        console.info(targetDept);
                         if (targetDept) {
                             $("#parentId").val(targetDept.parentId);
                             $("#deptName").val(targetDept.name);

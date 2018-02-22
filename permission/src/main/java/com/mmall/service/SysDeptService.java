@@ -6,8 +6,10 @@
  */
 package com.mmall.service;
 
+import com.google.common.base.Preconditions;
 import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysDeptMapper;
+import com.mmall.dao.SysUserMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysDept;
 import com.mmall.param.DeptParam;
@@ -28,6 +30,9 @@ public class SysDeptService {
 
     @Autowired
     private SysDeptMapper sysDeptMapper;
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     public void save(DeptParam deptParam) {
         BeanValidator.check(deptParam);
@@ -106,5 +111,25 @@ public class SysDeptService {
         }
 
         sysDeptMapper.updateByPrimaryKeySelective(afterDept);
+    }
+
+    /**
+     * 删除部门
+     *
+     * @param deptId
+     */
+    public void delete(Integer deptId) {
+        SysDept dept = sysDeptMapper.selectByPrimaryKey(deptId);
+        Preconditions.checkNotNull(dept, "待删除部门不存在，无法删除");
+
+        if (sysDeptMapper.countByParentId(deptId) > 0) {
+            throw new ParamException("当前部门有子部门，无法删除");
+        }
+
+        if (sysUserMapper.countByDepId(deptId) > 0) {
+            throw new ParamException("当前部门下存在用户，无法删除");
+        }
+
+        sysDeptMapper.deleteByPrimaryKey(deptId);
     }
 }

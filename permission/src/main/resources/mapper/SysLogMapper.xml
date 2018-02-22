@@ -2,29 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mmall.dao.SysLogMapper">
     <resultMap id="BaseResultMap" type="com.mmall.model.SysLog">
-        <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="type" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="target_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="operator" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="operate_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="operate_ip" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-        </constructor>
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="target_id" property="targetId" jdbcType="INTEGER"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
 
     <resultMap id="ResultMapWithBLOBs" type="com.mmall.model.SysLogWithBLOBs">
-        <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="type" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="target_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="operator" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="operate_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="operate_ip" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="old_value" jdbcType="LONGVARCHAR" javaType="java.lang.String"/>
-            <arg column="new_value" jdbcType="LONGVARCHAR" javaType="java.lang.String"/>
-        </constructor>
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="target_id" property="targetId" jdbcType="INTEGER"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="old_value" property="oldValue" jdbcType="LONGVARCHAR"/>
+        <result column="new_value" property="newValue" jdbcType="LONGVARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

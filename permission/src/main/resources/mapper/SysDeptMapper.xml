@@ -2,17 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mmall.dao.SysDeptMapper">
     <resultMap id="BaseResultMap" type="com.mmall.model.SysDept">
-        <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="level" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="seq" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="operator" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <arg column="operate_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="operate_ip" jdbcType="VARCHAR" javaType="java.lang.String"/>
-        </constructor>
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="VARCHAR"/>
+        <result column="seq" property="seq" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="operator" property="operator" jdbcType="VARCHAR"/>
+        <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP"/>
+        <result column="operate_ip" property="operateIp" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -26,7 +24,7 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectAllDept" resultType="com.mmall.model.SysDept">
+    <select id="selectAllDept" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_dept
@@ -45,11 +43,17 @@
         </if>
     </select>
 
-    <select id="getChildDeptListByLevel" parameterType="java.lang.String" resultType="com.mmall.model.SysDept">
+    <select id="getChildDeptListByLevel" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_dept
         where level like concat (#{level}, '.%')
+    </select>
+
+    <select id="countByParentId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(id)
+        from sys_dept
+        where parent_id = #{deptId}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

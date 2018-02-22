@@ -9,6 +9,7 @@ package com.mmall.service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mmall.common.RequestHolder;
+import com.mmall.dao.SysAclMapper;
 import com.mmall.dao.SysAclModuleMapper;
 import com.mmall.dto.AclModuleLevelDto;
 import com.mmall.exception.ParamException;
@@ -32,6 +33,9 @@ public class SysAclModuleService {
 
     @Autowired
     private SysAclModuleMapper sysAclModuleMapper;
+
+    @Autowired
+    private SysAclMapper sysAclMapper;
 
     public void save(AclModuleParam aclModuleParam) {
         BeanValidator.check(aclModuleParam);
@@ -180,10 +184,18 @@ public class SysAclModuleService {
      */
     public void delete(Integer moduleId) {
         SysAclModule module = sysAclModuleMapper.selectByPrimaryKey(moduleId);
-        if (module == null)
-            throw new ParamException("该权限模块不存在");
+        if (module == null) {
+            throw new ParamException("该权限模块不存在，无法删除");
+        }
 
-        String level = module.getLevel() + LevelUtil.SEPERATOR + module.getId();
-        sysAclModuleMapper.deleteSelfAndChildrenByLevel(level, module.getId());
+        if (sysAclModuleMapper.countByParentId(moduleId) > 0) {
+            throw new ParamException("该权限模块存在子模块，无法删除");
+        }
+
+        if (sysAclMapper.countByAclModuleId(moduleId) > 0) {
+            throw new ParamException("该权限模块下存在权限点，无法删除");
+        }
+
+        sysAclModuleMapper.deleteByPrimaryKey(moduleId);
     }
 }
