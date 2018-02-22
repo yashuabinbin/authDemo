@@ -33,6 +33,15 @@
         where role_id = #{roleId}
     </select>
 
+    <select id="selectUserIdListByRoleIdList" parameterType="java.util.List" resultType="java.lang.Integer">
+        select user_id
+        from sys_role_user
+        where role_id in
+        <foreach collection="roleIdList" item="roleId" separator="," open="(" close=")">
+            #{roleId}
+        </foreach>
+    </select>
+
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_role_user

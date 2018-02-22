@@ -18,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class SysRoleUserService {
@@ -69,8 +72,8 @@ public class SysRoleUserService {
         sysRoleUserMapper.deleteByRoleId(roleId);
 
         List<SysRoleUser> roleUserList = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(userIdList)) {
-            for (Integer userId: userIdList) {
+        if (CollectionUtils.isNotEmpty(userIdList)) {
+            for (Integer userId : userIdList) {
                 SysRoleUser sysRoleUser = new SysRoleUser();
                 sysRoleUser.setRoleId(roleId);
                 sysRoleUser.setUserId(userId);

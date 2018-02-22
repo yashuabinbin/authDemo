@@ -38,6 +38,16 @@
         from sys_role
     </select>
 
+    <select id="selectByIdList" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        where id IN
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_role
         where id = #{id,jdbcType=INTEGER}

@@ -6,27 +6,35 @@
  */
 package com.mmall.service;
 
+import com.google.common.collect.Lists;
 import com.mmall.beans.PageQuery;
 import com.mmall.beans.PageResult;
 import com.mmall.common.RequestHolder;
+import com.mmall.dao.SysRoleUserMapper;
 import com.mmall.dao.SysUserMapper;
 import com.mmall.exception.ParamException;
+import com.mmall.model.SysRole;
 import com.mmall.model.SysUser;
 import com.mmall.param.UserParam;
 import com.mmall.util.BeanValidator;
 import com.mmall.util.MD5Util;
 import com.mmall.util.PasswordUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SysUserService {
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
 
     public void save(UserParam userParam) {
         BeanValidator.check(userParam);
@@ -117,5 +125,25 @@ public class SysUserService {
      */
     public List<SysUser> getAll() {
         return sysUserMapper.selectAll();
+    }
+
+    /**
+     * 根据角色列表获取用户列表
+     *
+     * @param roleList
+     * @return
+     */
+    public List<SysUser> getUserListByRoleList(List<SysRole> roleList) {
+        if (CollectionUtils.isEmpty(roleList)) {
+            return Lists.newArrayList();
+        }
+
+        List<Integer> roleIdList = roleList.stream().map(role -> role.getId()).collect(Collectors.toList());
+        List<Integer> userIdList = sysRoleUserMapper.selectUserIdListByRoleIdList(roleIdList);
+        if (CollectionUtils.isEmpty(userIdList)) {
+            return Lists.newArrayList();
+        }
+
+        return sysUserMapper.selectByUserIdList(userIdList);
     }
 }

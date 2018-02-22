@@ -6,12 +6,12 @@
  */
 package com.mmall.controller;
 
+import com.mmall.common.ApplicationContextHelper;
 import com.mmall.common.JsonData;
 import com.mmall.dao.SysAclModuleMapper;
 import com.mmall.exception.PermissionException;
 import com.mmall.model.SysAclModule;
 import com.mmall.param.TestVo;
-import com.mmall.common.ApplicationContextHelper;
 import com.mmall.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

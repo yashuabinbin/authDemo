@@ -1,9 +1,12 @@
 package com.mmall.controller;
 
 import com.mmall.common.JsonData;
+import com.mmall.dto.AclModuleLevelDto;
 import com.mmall.dto.DeptLevelDto;
+import com.mmall.model.SysRole;
 import com.mmall.param.DeptParam;
 import com.mmall.service.SysDeptService;
+import com.mmall.service.SysRoleService;
 import com.mmall.service.SysTreeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/sys/dept")
@@ -25,6 +30,9 @@ public class SysDeptController {
 
     @Autowired
     private SysTreeService sysTreeService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     /**
      * 跳转部门页面
@@ -85,5 +93,25 @@ public class SysDeptController {
     public JsonData delete(@RequestParam(value = "id") Integer deptId) {
         sysDeptService.delete(deptId);
         return JsonData.success();
+    }
+
+    /**
+     * 根据用户id获取权限树
+     *
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/acls.json")
+    @ResponseBody
+    public JsonData acls(@RequestParam(value = "userId") Integer userId) {
+        //角色列表
+        List<SysRole> roleList = sysRoleService.getRoleListByUserId(userId);
+        //权限列表
+        List<AclModuleLevelDto> aclDtoList = sysTreeService.userAclList(userId);
+
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("acls", aclDtoList);
+        returnMap.put("roles", roleList);
+        return JsonData.success(returnMap);
     }
 }

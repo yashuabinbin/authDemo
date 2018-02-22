@@ -11,6 +11,10 @@ import java.util.Date;
 @AllArgsConstructor
 public class SysRole {
 
+    public static final int ADMIN = 1;
+
+    public static final int NOT_ADMIN = 2;
+
     private Integer id;
 
     private String name;
@@ -26,9 +30,5 @@ public class SysRole {
     private Date operateTime;
 
     private String operateIp;
-
-    public static final int ADMIN = 1;
-
-    public static final int NOT_ADMIN = 2;
 
 }

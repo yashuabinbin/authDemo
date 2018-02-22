@@ -43,12 +43,12 @@ public class SysRoleAclService {
         // 删除该角色所拥有的所有权限
         sysRoleAclMapper.deleteByRoleId(roleId);
 
-        if(aclIdList.size() == 0) {
+        if (aclIdList.size() == 0) {
             return;
         }
 
         List<SysRoleAcl> roleAclList = new ArrayList<>();
-        for (Integer aclId: aclIdList) {
+        for (Integer aclId : aclIdList) {
             SysRoleAcl sysRoleAcl = new SysRoleAcl();
             sysRoleAcl.setAclId(aclId);
             sysRoleAcl.setRoleId(roleId);

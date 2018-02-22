@@ -6,12 +6,16 @@
  */
 package com.mmall.service;
 
+import com.google.common.collect.Lists;
 import com.mmall.common.RequestHolder;
+import com.mmall.dao.SysRoleAclMapper;
 import com.mmall.dao.SysRoleMapper;
+import com.mmall.dao.SysRoleUserMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysRole;
 import com.mmall.param.RoleParam;
 import com.mmall.util.BeanValidator;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +27,12 @@ public class SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysRoleUserMapper sysRoleUserMapper;
+
+    @Autowired
+    private SysRoleAclMapper sysRoleAclMapper;
 
     public void save(RoleParam roleParam) {
         BeanValidator.check(roleParam);
@@ -64,7 +74,7 @@ public class SysRoleService {
         sysRoleMapper.updateByPrimaryKeySelective(afterSysRole);
     }
 
-    public List<SysRole> getAll(){
+    public List<SysRole> getAll() {
         return sysRoleMapper.selectAll();
     }
 
@@ -72,4 +82,33 @@ public class SysRoleService {
         return sysRoleMapper.countByNameAndId(name, id) > 0;
     }
 
+    /**
+     * 根据用户id获取角色列表
+     *
+     * @param userId
+     * @return
+     */
+    public List<SysRole> getRoleListByUserId(Integer userId) {
+        List<Integer> roleIdList = sysRoleUserMapper.selectRoleIdListByUserId(userId);
+        if (CollectionUtils.isEmpty(roleIdList)) {
+            return Lists.newArrayList();
+        } else {
+            return sysRoleMapper.selectByIdList(roleIdList);
+        }
+    }
+
+    /**
+     * 根据权限id获取角色列表
+     *
+     * @param aclId
+     * @return
+     */
+    public List<SysRole> getRoleListByAclId(Integer aclId) {
+        List<Integer> roleIdList = sysRoleAclMapper.selectRoleIdListByAclId(aclId);
+        if (CollectionUtils.isEmpty(roleIdList)) {
+            return Lists.newArrayList();
+        } else {
+            return sysRoleMapper.selectByIdList(roleIdList);
+        }
+    }
 }
