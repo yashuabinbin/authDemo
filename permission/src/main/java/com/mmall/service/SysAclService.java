@@ -12,6 +12,7 @@ import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysAclMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysAcl;
+import com.mmall.model.SysLog;
 import com.mmall.param.AclParam;
 import com.mmall.util.BeanValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class SysAclService {
 
     @Autowired
     private SysAclMapper sysAclMapper;
+
+    @Autowired
+    private SysLogService sysLogService;
 
     public void save(AclParam aclParam) {
         BeanValidator.check(aclParam);
@@ -46,6 +50,8 @@ public class SysAclService {
         sysAcl.setOperateIp(RequestHolder.getRequestIp());
         sysAcl.setCode(generateCode());
         sysAclMapper.insert(sysAcl);
+
+        sysLogService.saveAclLog(null, sysAcl);
     }
 
     public void update(AclParam aclParam) {
@@ -73,6 +79,8 @@ public class SysAclService {
         afterSysAcl.setOperateIp(RequestHolder.getRequestIp());
         afterSysAcl.setCode(generateCode());
         sysAclMapper.updateByPrimaryKeySelective(afterSysAcl);
+
+        sysLogService.saveAclLog(beforeSysAcl, afterSysAcl);
     }
 
     public boolean checkExist(int aclModuleId, String name, Integer id) {

@@ -34,6 +34,9 @@ public class SysRoleService {
     @Autowired
     private SysRoleAclMapper sysRoleAclMapper;
 
+    @Autowired
+    private SysLogService sysLogService;
+
     public void save(RoleParam roleParam) {
         BeanValidator.check(roleParam);
         if (checkExist(roleParam.getName(), null)) {
@@ -49,6 +52,8 @@ public class SysRoleService {
         sysRole.setOperateIp(RequestHolder.getRequestIp());
         sysRole.setOperateTime(new Date());
         sysRoleMapper.insert(sysRole);
+
+        sysLogService.saveRoleLog(null, sysRole);
     }
 
     public void update(RoleParam roleParam) {
@@ -72,6 +77,8 @@ public class SysRoleService {
         afterSysRole.setOperateIp(RequestHolder.getRequestIp());
         afterSysRole.setOperateTime(new Date());
         sysRoleMapper.updateByPrimaryKeySelective(afterSysRole);
+
+        sysLogService.saveRoleLog(beforeSysRole, afterSysRole);
     }
 
     public List<SysRole> getAll() {

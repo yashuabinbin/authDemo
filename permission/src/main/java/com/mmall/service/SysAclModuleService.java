@@ -37,6 +37,9 @@ public class SysAclModuleService {
     @Autowired
     private SysAclMapper sysAclMapper;
 
+    @Autowired
+    private SysLogService sysLogService;
+
     public void save(AclModuleParam aclModuleParam) {
         BeanValidator.check(aclModuleParam);
 
@@ -56,6 +59,8 @@ public class SysAclModuleService {
         sysAclModule.setOperateTime(new Date());
 
         sysAclModuleMapper.insertSelective(sysAclModule);
+
+        sysLogService.saveAclModuleLog(null, sysAclModule);
     }
 
     private boolean checkNameExist(String name, Integer parentId, Integer id) {
@@ -85,6 +90,8 @@ public class SysAclModuleService {
         afterModule.setOperator(RequestHolder.getCurrentUserName());
 
         updateWithChild(beforeModule, afterModule);
+
+        sysLogService.saveAclModuleLog(beforeModule, afterModule);
     }
 
     private String getLevel(Integer parentId) {
@@ -197,5 +204,7 @@ public class SysAclModuleService {
         }
 
         sysAclModuleMapper.deleteByPrimaryKey(moduleId);
+
+        sysLogService.saveAclModuleLog(module, null);
     }
 }

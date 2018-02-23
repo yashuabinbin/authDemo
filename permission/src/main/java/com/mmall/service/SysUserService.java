@@ -36,6 +36,9 @@ public class SysUserService {
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
 
+    @Autowired
+    private SysLogService sysLogService;
+
     public void save(UserParam userParam) {
         BeanValidator.check(userParam);
 
@@ -60,6 +63,8 @@ public class SysUserService {
         sysUser.setOperateTime(new Date());
 
         sysUserMapper.insertSelective(sysUser);
+
+        sysLogService.saveUserLog(null, sysUser);
     }
 
     public void update(UserParam userParam) {
@@ -90,6 +95,8 @@ public class SysUserService {
         afterSysUser.setOperateTime(new Date());
 
         sysUserMapper.updateByPrimaryKeySelective(afterSysUser);
+
+        sysLogService.saveUserLog(beforeSysUser, afterSysUser);
     }
 
     private boolean checkEmailExist(String mail, Integer userId) {

@@ -12,6 +12,7 @@ import com.mmall.dao.SysDeptMapper;
 import com.mmall.dao.SysUserMapper;
 import com.mmall.exception.ParamException;
 import com.mmall.model.SysDept;
+import com.mmall.model.SysLog;
 import com.mmall.param.DeptParam;
 import com.mmall.util.BeanValidator;
 import com.mmall.util.LevelUtil;
@@ -34,6 +35,9 @@ public class SysDeptService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    private SysLogService sysLogService;
+
     public void save(DeptParam deptParam) {
         BeanValidator.check(deptParam);
 
@@ -51,6 +55,8 @@ public class SysDeptService {
         dept.setOperator(RequestHolder.getCurrentUserName());
         dept.setOperateTime(new Date());
         sysDeptMapper.insertSelective(dept);
+
+        sysLogService.saveDeptLog(null, dept);
     }
 
     private boolean checkExist(Integer parentId, String depName, Integer id) {
@@ -89,6 +95,8 @@ public class SysDeptService {
         afterDept.setLevel(LevelUtil.calculateLevel(deptParam.getParentId(), getLevel(deptParam.getParentId())));
 
         updateWithChild(beforeDept, afterDept);
+
+        sysLogService.saveDeptLog(beforeDept, afterDept);
     }
 
     private void updateWithChild(SysDept beforeDept, SysDept afterDept) {
@@ -131,5 +139,7 @@ public class SysDeptService {
         }
 
         sysDeptMapper.deleteByPrimaryKey(deptId);
+
+        sysLogService.saveDeptLog(dept, null);
     }
 }
