@@ -7,16 +7,27 @@
 package com.mmall.service;
 
 import com.mmall.beans.LogType;
+import com.mmall.beans.PageQuery;
+import com.mmall.beans.PageResult;
 import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysLogMapper;
+import com.mmall.dto.SearchLogDto;
+import com.mmall.exception.ParamException;
 import com.mmall.model.*;
+import com.mmall.param.SearchLogParam;
+import com.mmall.util.BeanValidator;
+import com.mmall.util.DateUtil;
 import com.mmall.util.JsonMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class SysLogService {
 
@@ -31,7 +42,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(after == null ? before.getId() : after.getId());
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -44,7 +55,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(after == null ? before.getId() : after.getId());
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -57,7 +68,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(after == null ? before.getId() : after.getId());
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -70,7 +81,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(after == null ? before.getId() : after.getId());
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -83,7 +94,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(after == null ? before.getId() : after.getId());
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -96,7 +107,7 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(roleId);
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
     }
@@ -109,8 +120,42 @@ public class SysLogService {
         sysLog.setOperator(RequestHolder.getCurrentUserName());
         sysLog.setTargetId(roleId);
         sysLog.setOldValue(before == null ? "" : JsonMapper.obj2String(before));
-        sysLog.setOldValue(after == null ? "" : JsonMapper.obj2String(after));
+        sysLog.setNewValue(after == null ? "" : JsonMapper.obj2String(after));
         sysLog.setStatus(1);
         sysLogMapper.insert(sysLog);
+    }
+
+    public PageResult<SysLogWithBLOBs> searchPageList(SearchLogParam searchLogParam, PageQuery pageQuery) {
+        BeanValidator.check(searchLogParam);
+
+        SearchLogDto dto = new SearchLogDto();
+
+        dto.setAfterSeg(searchLogParam.getAfterSeg());
+        dto.setBeforeSeg(searchLogParam.getBeforeSeg());
+        dto.setOperator(searchLogParam.getOperator());
+        dto.setType(searchLogParam.getType());
+        String datePattern = "yyyy-MM-dd HH:mm:ss";
+        try {
+            if (StringUtils.isNotBlank(searchLogParam.getFromTime())) {
+                dto.setFromTime(DateUtil.str2Date(searchLogParam.getFromTime(), datePattern));
+            }
+
+            if (StringUtils.isNotBlank(searchLogParam.getToTime())) {
+                dto.setToTime(DateUtil.str2Date(searchLogParam.getToTime(), datePattern));
+            }
+        } catch (ParseException e) {
+            throw new ParamException("传入的日期格式有问题，正确的格式应为：" + datePattern);
+        }
+
+        int count = sysLogMapper.countBySearchDto(dto, pageQuery);
+        if (count > 0) {
+            List<SysLogWithBLOBs> pageList = sysLogMapper.selectPageListBySearchDto(dto, pageQuery);
+            PageResult<SysLogWithBLOBs> pageResult = new PageResult<>();
+            pageResult.setData(pageList);
+            pageResult.setTotal(count);
+            return pageResult;
+        }
+
+        return null;
     }
 }

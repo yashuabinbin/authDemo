@@ -28,7 +28,7 @@
     </sql>
 
     <sql id="Blob_Column_List">
-        old_value, new_value
+        id, type, target_id, operator, operate_time, operate_ip, status, old_value, new_value
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
@@ -38,6 +38,63 @@
         <include refid="Blob_Column_List"/>
         from sys_log
         where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="countBySearchDto" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(id)
+        from sys_log
+        <where>
+            <if test="dto.type != null and dto.type != ''">
+                and type = #{dto.type}
+            </if>
+            <if test="dto.beforeSeg != null and dto.beforeSeg != ''">
+                and old_value like concat('%', #{dto.beforeSeg}, '%')
+            </if>
+            <if test="dto.afterSeg != null and dto.afterSeg != ''">
+                and new_value like concat('%', #{dto.afterSeg}, '%')
+            </if>
+            <if test="dto.operator != null and dto.operator != ''">
+                and operator = #{dto.operator}
+            </if>
+            <if test="dto.fromTime != null">
+                and operate_time >= #{dto.fromTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="dto.toTime != null">
+                <![CDATA[
+                  and operate_time <= #{dto.toTime, jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPageListBySearchDto" parameterType="java.util.Map" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Blob_Column_List"/>
+        from sys_log
+        <where>
+            <if test="dto.type != null and dto.type != ''">
+                and type = #{dto.type}
+            </if>
+            <if test="dto.beforeSeg != null and dto.beforeSeg != ''">
+                and old_value like concat('%', #{dto.beforeSeg}, '%')
+            </if>
+            <if test="dto.afterSeg != null and dto.afterSeg != ''">
+                and new_value like concat('%', #{dto.afterSeg}, '%')
+            </if>
+            <if test="dto.operator != null and dto.operator != ''">
+                and operator = #{dto.operator}
+            </if>
+            <if test="dto.fromTime != null">
+                and operate_time >= #{dto.fromTime, jdbcType=TIMESTAMP}
+            </if>
+            <if test="dto.toTime != null">
+                <![CDATA[
+                  and operate_time <= #{dto.toTime, jdbcType=TIMESTAMP}
+                ]]>
+            </if>
+        </where>
+        order by id asc
+        limit #{pageQuery.offSet}, #{pageQuery.pageSize}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

@@ -51,7 +51,7 @@ public class SysRoleService {
         sysRole.setOperator(RequestHolder.getCurrentUserName());
         sysRole.setOperateIp(RequestHolder.getRequestIp());
         sysRole.setOperateTime(new Date());
-        sysRoleMapper.insert(sysRole);
+        sysRoleMapper.insertSelective(sysRole);
 
         sysLogService.saveRoleLog(null, sysRole);
     }
