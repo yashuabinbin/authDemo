@@ -16,6 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping(value = "/sys/user")
@@ -24,6 +28,11 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @RequestMapping(value = "/noAuth.page")
+    public ModelAndView noAuth() throws IOException {
+        return new ModelAndView("noAuth");
+    }
 
     /**
      * 获取分页用户列表
@@ -40,6 +49,8 @@ public class SysUserController {
 
     /**
      * 保存用户
+     *
+     *
      *
      * @param userParam
      * @return
