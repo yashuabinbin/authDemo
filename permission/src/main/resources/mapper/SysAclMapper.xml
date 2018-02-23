@@ -68,6 +68,13 @@
         </foreach>
     </select>
 
+    <select id="selectByUrl" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_acl
+        where url = #{url}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from sys_acl
         where id = #{id,jdbcType=INTEGER}

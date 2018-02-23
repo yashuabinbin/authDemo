@@ -12,11 +12,11 @@ import com.mmall.model.SysUser;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(filterName = "loginFilter", urlPatterns = { "/sys/*", "/admin/*" })
 public class LoginFilter implements Filter {
 
     @Override
@@ -36,6 +36,7 @@ public class LoginFilter implements Filter {
             return;
         }
 
+        System.out.println("login filter dodo");
         RequestHolder.add(currentUser);
         RequestHolder.add(req);
         filterChain.doFilter(servletRequest, servletResponse);
