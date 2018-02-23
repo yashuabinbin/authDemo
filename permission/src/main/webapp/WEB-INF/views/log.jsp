@@ -112,6 +112,7 @@
 </tr>
 {{/logList}}
 
+
     </script>
 
     <script type="text/javascript">

@@ -167,6 +167,7 @@
     {{/deptList}}
 </ol>
 
+
 </script>
 <script id="userListTemplate" type="x-tmpl-mustache">
 {{#userList}}
@@ -188,6 +189,7 @@
     </td>
 </tr>
 {{/userList}}
+
 
 </script>
 

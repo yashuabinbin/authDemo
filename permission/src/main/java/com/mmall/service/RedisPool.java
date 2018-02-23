@@ -4,7 +4,7 @@
  * history :
  *     1. 2018/2/23  下午 1:53 created by lbb
  */
-package com.mmall.common;
+package com.mmall.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class RedisPool {
         return jedisPool.getResource();
     }
 
-    public static void safeClose(Jedis jedis) {
+    public void safeClose(Jedis jedis) {
         try {
             if (jedis != null) {
                 jedis.close();

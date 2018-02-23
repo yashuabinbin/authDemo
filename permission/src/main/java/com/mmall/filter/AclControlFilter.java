@@ -14,11 +14,8 @@ import com.mmall.model.SysUser;
 import com.mmall.service.SysCoreService;
 import com.mmall.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,11 +26,11 @@ import java.util.Set;
 @Slf4j
 public class AclControlFilter implements Filter {
 
-    // 不进行过滤的url集合
-    private static Set<String> exclusionUrlSet = new HashSet<>();
-
     // 无权限页面url
     private static final String NO_AUTH_URL = "/sys/user/noAuth.page";
+
+    // 不进行过滤的url集合
+    private static Set<String> exclusionUrlSet = new HashSet<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -67,8 +64,6 @@ public class AclControlFilter implements Filter {
             noAuth(request, response);
             return;
         }
-
-        System.out.println("acl filter dodo");
 
         filterChain.doFilter(servletRequest, servletResponse);
         return;

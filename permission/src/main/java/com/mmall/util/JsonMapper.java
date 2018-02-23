@@ -6,7 +6,6 @@
  */
 package com.mmall.util;
 
-import com.mmall.model.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -51,20 +50,5 @@ public class JsonMapper {
             log.warn("parse String to Object exception, String:{}, TypeReference:{}, error:{}", src, typeReference, e);
             return null;
         }
-    }
-
-    public static void main(String[] args) {
-        SysUser user = new SysUser();
-        user.setId(1);
-        user.setMail("luybingbin@qq.com");
-        user.setOperateIp("192.168.12.1");
-        user.setPassword("11");
-        String userJson = JsonMapper.obj2String(user);
-        System.out.println(userJson);
-
-        user = null;
-        user = JsonMapper.string2Obj(userJson, new TypeReference<SysUser>() {
-        });
-        System.out.println(user);
     }
 }

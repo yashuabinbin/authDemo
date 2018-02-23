@@ -75,7 +75,6 @@ public class UserController {
                 errorMsg = "用户已经被冻结，请联系管理员";
             } else {
                 session.setAttribute(Const.CURRENT_USER, sysUser);
-                System.out.println(StringUtils.isBlank(ret));
                 response.sendRedirect(StringUtils.isBlank(ret) ? "/admin/index.page" : ret);
                 return;
             }

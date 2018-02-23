@@ -7,13 +7,17 @@
 package com.mmall.service;
 
 import com.google.common.collect.Lists;
+import com.mmall.beans.CacheKeyConstants;
 import com.mmall.common.RequestHolder;
 import com.mmall.dao.SysAclMapper;
 import com.mmall.dao.SysRoleAclMapper;
 import com.mmall.dao.SysRoleUserMapper;
 import com.mmall.model.SysAcl;
 import com.mmall.model.SysUser;
+import com.mmall.util.JsonMapper;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +37,9 @@ public class SysCoreService {
 
     @Autowired
     private SysRoleUserMapper sysRoleUserMapper;
+
+    @Autowired
+    private SysCacheService sysCacheService;
 
     /**
      * 获取当前用户所拥有的权限点
@@ -112,7 +119,7 @@ public class SysCoreService {
             return true;
         }
 
-        List<SysAcl> currentUserAclList = getCurrentUserAclList();
+        List<SysAcl> currentUserAclList = getCurrentUserAclListFromCache();
         if (CollectionUtils.isEmpty(currentUserAclList)) {
             return false;
         }
@@ -135,5 +142,28 @@ public class SysCoreService {
         }
 
         return false;
+    }
+
+    /**
+     * 从缓存中获取当前用户的权限列表
+     *
+     * @return
+     */
+    public List<SysAcl> getCurrentUserAclListFromCache() {
+        SysUser sysUser = RequestHolder.getCurrentUser();
+        if (sysUser == null) {
+            return Lists.newArrayList();
+        }
+
+        int userId = sysUser.getId();
+        String cacheValue = sysCacheService.getFromCache(CacheKeyConstants.USER_ACLS, String.valueOf(userId));
+        if (StringUtils.isBlank(cacheValue)) {
+            List<SysAcl> sysAclList = getCurrentUserAclList();
+            sysCacheService.saveCache(JsonMapper.obj2String(sysAclList), 600, CacheKeyConstants.USER_ACLS, String.valueOf(userId));
+            return sysAclList;
+        } else {
+            return JsonMapper.string2Obj(cacheValue, new TypeReference<List<SysAcl>>() {
+            });
+        }
     }
 }

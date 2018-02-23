@@ -123,6 +123,7 @@
     {{/roleList}}
 </ol>
 
+
 </script>
 
 <script id="selectedUsersTemplate" type="x-tmpl-mustache">
@@ -130,12 +131,14 @@
     <option value="{{id}}" selected="selected">{{username}}</option>
 {{/userList}}
 
+
 </script>
 
 <script id="unSelectedUsersTemplate" type="x-tmpl-mustache">
 {{#userList}}
     <option value="{{id}}">{{username}}</option>
 {{/userList}}
+
 
 </script>
 

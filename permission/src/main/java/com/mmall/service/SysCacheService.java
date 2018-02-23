@@ -8,7 +8,6 @@ package com.mmall.service;
 
 import com.google.common.base.Joiner;
 import com.mmall.beans.CacheKeyConstants;
-import com.mmall.common.RedisPool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,18 +20,17 @@ public class SysCacheService {
     @Autowired
     private RedisPool redisPool;
 
-    public void saveCache(String toSaveValue, int timeoutSeconds, CacheKeyConstants prefix) {
-        saveCache(toSaveValue, timeoutSeconds, prefix, null);
-    }
-
     /**
      * 向redis中存储键值对
      *
      * @param toSaveValue
      * @param timeoutSeconds
      * @param prefix
-     * @param keys
      */
+    public void saveCache(String toSaveValue, int timeoutSeconds, CacheKeyConstants prefix) {
+        saveCache(toSaveValue, timeoutSeconds, prefix, null);
+    }
+
     public void saveCache(String toSaveValue, int timeoutSeconds, CacheKeyConstants prefix, String... keys) {
         if (toSaveValue == null) {
             return;
@@ -47,7 +45,29 @@ public class SysCacheService {
         } catch (Exception e) {
             log.error("redis save value error! prefix:{}, keys:{}, toSaveValue:{}", prefix, keys, toSaveValue);
         } finally {
-            RedisPool.safeClose(jedis);
+            redisPool.safeClose(jedis);
+        }
+    }
+
+    /**
+     * 从redis中获取值
+     *
+     * @param prefix
+     * @param keys
+     * @return
+     */
+    public String getFromCache(CacheKeyConstants prefix, String... keys) {
+        Jedis jedis = null;
+
+        try {
+            jedis = redisPool.instance();
+            String cacheKey = generateCacheKey(prefix, keys);
+            return jedis.get(cacheKey);
+        } catch (Exception e) {
+            log.error("redis get value error! prefix:{}, keys:{}", prefix, keys);
+            return null;
+        } finally {
+            redisPool.safeClose(jedis);
         }
     }
 
@@ -58,5 +78,4 @@ public class SysCacheService {
         }
         return key;
     }
-
 }

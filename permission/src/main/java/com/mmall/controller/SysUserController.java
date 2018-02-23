@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
@@ -49,8 +48,6 @@ public class SysUserController {
 
     /**
      * 保存用户
-     *
-     *
      *
      * @param userParam
      * @return
