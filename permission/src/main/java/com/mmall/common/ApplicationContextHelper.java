@@ -30,6 +30,6 @@ public class ApplicationContextHelper implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
-        this.applicationContext = context;
+        applicationContext = context;
     }
 }
